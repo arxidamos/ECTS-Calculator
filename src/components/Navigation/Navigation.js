@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '/home/dimos/Desktop/ectsTool/ects-tool/src/logo.svg';
 import burger from '/home/dimos/Desktop/ectsTool/ects-tool/src/menu.svg';
+import x_burger from '/home/dimos/Desktop/ectsTool/ects-tool/src/x.svg';
+
 import './Navigation.css';
 
 const Navigation = () => {
   const [click, setClick] = useState(false);
 
-  const handleClick = () => setClick(!click);
+  const handleClick = () => {
+    setClick(!click)
+  };
+
   return (
     <>
       <nav className="navbar">
@@ -49,7 +54,7 @@ const Navigation = () => {
           </ul>
           <div className="nav-icon" onClick={handleClick}>
             {/* <i className={click ? "fas fa-times" : "fas fa-bars"}></i> */}
-            <img className="burger-icon" src={burger} alt="burger menu icon" />
+            <img className={`burger-icon ${click ? 'fade-in' : ''}`} src={click ? x_burger : burger} alt="burger menu icon, courtesy of featherIcons" />
           </div>
         </div>
       </nav>
