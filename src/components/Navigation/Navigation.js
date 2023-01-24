@@ -19,8 +19,7 @@ const Navigation = () => {
         <div className="nav-container">
           <NavLink to="/" className="nav-logo">
             ECTS Calculator
-            {/* <i className="fas fa-code"></i> */}
-            <img className="logo" src={logo} alt="website logo" />
+              <img className="logo" src={logo} alt="website logo" />
           </NavLink>
 
           <ul className={click ? "nav-menu active" : "nav-menu"}>

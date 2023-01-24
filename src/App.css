@@ -4,11 +4,12 @@
 }
 
 body {
-  background-color: #b5fac7;
+  background-color: #fcf6f5;
 }
 
 .pages {
-  color: #316685;
+  /* color: #316685; */
+  color: #195190;
   text-align: center;
   font-size: 3.5rem;
   margin-top: 10%;
