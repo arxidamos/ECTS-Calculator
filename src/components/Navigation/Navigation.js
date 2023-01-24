@@ -10,14 +10,19 @@ const Navigation = () => {
   const [click, setClick] = useState(false);
 
   const handleClick = () => {
-    setClick(!click)
+    setClick(!click);
   };
+
+  // If title/logo clicked, burger menu should always close
+  const closeMenu = () => {
+    setClick(false);
+  }
 
   return (
     <>
       <nav className="navbar">
         <div className="nav-container">
-          <NavLink to="/" className="nav-logo">
+          <NavLink to="/" className="nav-logo" onClick={closeMenu}>
             ECTS Calculator
               <img className="logo" src={logo} alt="website logo" />
           </NavLink>

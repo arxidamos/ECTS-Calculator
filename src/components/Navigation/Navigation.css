@@ -74,7 +74,7 @@
 
 .nav-item .active {
   color: #fcf6f5;
-  border: 1px solid #fcf6f5;
+  border-bottom: 3px solid #fcf6f5;
 }
 
 .nav-icon {
