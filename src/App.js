@@ -12,9 +12,9 @@ function App() {
       <Navigation />
       <div className="pages">
         <Routes>
-          <Route exact path="/" component={MainPage} />
-          <Route path="/about" component={About} />
-          <Route path="/contact" component={Contact} />
+          <Route path="/" element={ <MainPage/> } />
+          <Route path="/about" element={ <About/> } />
+          <Route path="/contact" element={ <Contact/> } />
         </Routes>
       </div>
     </BrowserRouter>
