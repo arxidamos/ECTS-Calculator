@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import './MainPage.css'
+import checkmark from '/home/dimos/Desktop/ectsTool/ects-tool/src/checkmark.svg'
+import closemark from '/home/dimos/Desktop/ectsTool/ects-tool/src/empty.svg';
 
 const MainPage = () => {
   const [courses, setCourses] = useState([
-    { course: "Εισαγωγή στον Προγραμματισμό Ι", ects: 5, grade: "A" },
-    { course: "Δομές Δεδομένων", ects: 10, grade: "B" },
-    { course: "Course 3", ects: 7, grade: "C" },
+    { course: "Εισαγωγή στον Προγραμματισμό Ι", ects: 5, grade: "" },
+    { course: "Δομές Δεδομένων", ects: 10, grade: "" },
+    { course: "Course 3", ects: 7, grade: "" },
   ]);
 
   const addCourse = () => {
@@ -24,22 +26,53 @@ const MainPage = () => {
         </thead>
         <tbody>
           {courses.map((course, index) => (
-            <tr key={index}>
-              <td data-label="Course" className="course-cell">
-                {course.course}
+            <tr className="course-row" key={index}>
+              <td data-label="Course" className="course-cell" title={course.course}>
+                
+                
+                {/* {course.course}
+                {course.completed && <img className="checkmark-img" src={checkmark} alt="Completed" />} */}
+  <div className="course-text-container">
+    <div className="img-course">
+    {course.completed ? <img className="checkmark-img" src={checkmark} alt="Completed" /> : <img className="checkmark-img" src={closemark} alt="Completed" />}
+    </div>
+
+                <div className="text-course">
+                  {course.course}
+                </div>
+  </div>
+
+
               </td>
               
               <td data-label="ECTS" className="ects-cell">
-                <input type="text" value={course.ects} onChange={(e) => {
+                <input className="course-input" type="text" value={course.ects} onChange={(e) => {
                   const newCourses = [...courses];
                   newCourses[index].ects = e.target.value;
                   setCourses(newCourses);}}/>
               </td>
               <td data-label="Grade" className="grade-cell">
-                <input type="text" value={course.grade} onChange={(e) => {
-                  const newCourses = [...courses];
-                  newCourses[index].grade = e.target.value;
-                  setCourses(newCourses);}}/>
+                <input
+                  className="course-input"
+                  type="text"
+                  value={course.grade ? course.grade : '-'}
+                  onChange={(e) => {
+                    if (e.target.value === '') {
+                      e.target.value = '-';
+                    } 
+                    const newCourses = [...courses];
+                    newCourses[index].grade = e.target.value;
+
+                    newCourses[index].completed = (e.target.value >= 5 && e.target.value <= 10) ? true : false;
+                    setCourses(newCourses);}}
+                    onFocus={(e) => {
+                      e.target.value = '';}}
+                    onBlur={(e) => {
+                      if (e.target.value === '') {
+                        e.target.value = '-';
+                      }
+                    }}
+                    />
               </td>
             </tr>
           ))}

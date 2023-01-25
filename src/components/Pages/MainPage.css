@@ -1,35 +1,40 @@
 table {
   border-collapse: collapse;
-  /* min-width: 400px; */
-  width: 100%;
-  /* overflow-x: auto; */
-  /* justify-content: center; */
+  width: 90%;
+  max-width: 800px;
   margin: auto;
   margin-bottom: 1em;
 }
 
-td {
-  /* border: 2px dotted black; */
-  /* padding: 1em; */
-  /* text-align: left; */
-  color: #195190;
-}
-
-
 th {
-  /* background-color: #195190; */
-  /* border: 1px solid #195190; */
-  padding: 2em;
+  padding: 2em 2em 1em 2em;
+  border-bottom: 1px solid #195190;
 }
 
 .course-cell {
   text-align: center;
+  position: relative;
+  
+}
+
+.course-text-container {
+  min-width: 12em;
+  display: flex;
+  height: 3.5em;
+  align-items: center;
+
+
+}
+
+.text-course {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 1em;
 }
 
 .ects-cell, .grade-cell {
   max-width: 3em;
-  /* margin-right: 3em; */
-
 }
 
 td > input {
@@ -42,9 +47,11 @@ td > input {
   padding: 1em;
   box-sizing: border-box;
   color: #195190;
-
   background-color: #fcf6f5;
-  /* background-color: #c7d3d4; */
+}
+
+.course-row:hover td, .course-row:hover .course-input {
+  background-color: #fff;
 }
 
 td > input:focus {
@@ -52,10 +59,17 @@ td > input:focus {
   background-color: #fff;
   color: #111;
   font-weight: bold;
-  /* background-color: #c7d3d4; */
   outline: none;
-  border: 1px solid #195190;
+  border-bottom: 1px solid #195190;
 }
+
+@media screen and (max-width: 700px) {
+  table {
+    table-layout: fixed;
+  }
+}
+
+
 
 @media screen and (max-width: 480px) {
   .responsive-table th, td {
