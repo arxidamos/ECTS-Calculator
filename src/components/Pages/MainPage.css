@@ -11,6 +11,11 @@ th {
   border-bottom: 1px solid #195190;
 }
 
+th.section-label {
+  color: #fcf6f5;
+  background-color: #195190;
+}
+
 .course-cell {
   text-align: center;
   position: relative;  
@@ -76,9 +81,17 @@ td > input:focus {
     width: 100%;
     text-align: left;
   }
-  .responsive-table th {
+  
+  .responsive-table th.column-header {
     display: none;
   }
+
+  .responsive-table th.section-label {
+    text-align: center;
+    padding: 2em 0em 1em 0em;
+
+  }
+
   .responsive-table td::before {
     content: attr(data-label);
     font-weight: bold;
