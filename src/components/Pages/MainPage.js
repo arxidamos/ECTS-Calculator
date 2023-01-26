@@ -27,22 +27,15 @@ const MainPage = () => {
         <tbody>
           {courses.map((course, index) => (
             <tr className="course-row" key={index}>
-              <td data-label="Course" className="course-cell" title={course.course}>
-                
-                
-                {/* {course.course}
-                {course.completed && <img className="checkmark-img" src={checkmark} alt="Completed" />} */}
-  <div className="course-text-container">
-    <div className="img-course">
-    {course.completed ? <img className="checkmark-img" src={checkmark} alt="Completed" /> : <img className="checkmark-img" src={closemark} alt="Completed" />}
-    </div>
-
-                <div className="text-course">
-                  {course.course}
+              <td data-label="" className="course-cell" title={course.course}>
+                <div className="course-text-container">
+                  <div className="img-course">
+                    {course.completed ? <img className="checkmark-img" src={checkmark} alt="Completed" /> : <img className="checkmark-img" src={closemark} alt="Completed" />}
+                  </div>
+                  <div className="text-course">
+                    {course.course}
+                  </div>
                 </div>
-  </div>
-
-
               </td>
               
               <td data-label="ECTS" className="ects-cell">
@@ -51,27 +44,30 @@ const MainPage = () => {
                   newCourses[index].ects = e.target.value;
                   setCourses(newCourses);}}/>
               </td>
+              
               <td data-label="Grade" className="grade-cell">
                 <input
                   className="course-input"
                   type="text"
-                  value={course.grade ? course.grade : '-'}
-                  onChange={(e) => {
-                    if (e.target.value === '') {
-                      e.target.value = '-';
-                    } 
-                    const newCourses = [...courses];
-                    newCourses[index].grade = e.target.value;
-
-                    newCourses[index].completed = (e.target.value >= 5 && e.target.value <= 10) ? true : false;
-                    setCourses(newCourses);}}
                     onFocus={(e) => {
-                      e.target.value = '';}}
+                      if (e.target.value === '-') {
+                        e.target.value = '';
+                      }
+                    }}
+                    defaultValue={course.grade ? course.grade : '-'}
                     onBlur={(e) => {
                       if (e.target.value === '') {
                         e.target.value = '-';
                       }
-                    }}
+                      const newCourses = [...courses];
+                      newCourses[index].grade = e.target.value;
+                      newCourses[index].completed = (e.target.value >= 5 && e.target.value <= 10) ? true : false;
+                      setCourses(newCourses);}}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.target.blur();
+                        }
+                      }}
                     />
               </td>
             </tr>
