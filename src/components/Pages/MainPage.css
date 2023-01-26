@@ -106,6 +106,10 @@ td > input:focus {
     border-bottom: 1px solid #195190;
   }
 
+  .course-text-container {
+    justify-content: center;
+  }
+
   .course-cell {
     width: 100%;
     justify-items: center;
@@ -115,6 +119,7 @@ td > input:focus {
   
   .ects-cell, .grade-cell {
     width: 100%;
+    
   }
 
   td {
@@ -127,6 +132,8 @@ td > input:focus {
 
   td > input {
     width: 100%;
+    padding: 1em 0em 1em 2em;
+    text-align: center;
   }
 
   td > input:focus {
