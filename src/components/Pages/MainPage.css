@@ -149,15 +149,3 @@ td > input:focus {
     text-align: center;
   }
 }
-
-/* @media screen and (min-width: 481px) {
-  .ects-cell, .grade-cell {
-    max-width: 3em;
-  }
-} */
-
-/* 
-gray:   #c7d3d4
-salmon: #fcf6f5
-blue:   #195190
-*/
