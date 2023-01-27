@@ -4,6 +4,18 @@ table {
   max-width: 800px;
   margin: auto;
   margin-bottom: 1em;
+  table-layout: fixed;
+}
+
+thead > tr > td:nth-child(3),
+thead > tr > td:nth-child(2) {
+  width: 18%;
+  visibility: hidden;
+}
+
+thead > tr > td:nth-child(1) {
+  width: 50%;
+  visibility: hidden;
 }
 
 th {
@@ -14,11 +26,13 @@ th {
 th.section-label {
   color: #fcf6f5;
   background-color: #195190;
+  font-size: larger;
+  padding: 1em 0em 1em 0em;
+
 }
 
 .course-cell {
-  text-align: center;
-  position: relative;  
+  position: relative;
 }
 
 .course-text-container {
@@ -65,16 +79,6 @@ td > input:focus {
   border-bottom: 1px solid #195190;
 }
 
-@media screen and (max-width: 700px) {
-  table {
-    table-layout: fixed;
-  }
-
-  .ects-cell, .grade-cell {
-    width: 2em;
-  }
-}
-
 @media screen and (max-width: 480px) {
   .responsive-table th, td {
     display: block;
@@ -84,12 +88,12 @@ td > input:focus {
   
   .responsive-table th.column-header {
     display: none;
+    visibility: hidden;
   }
 
   .responsive-table th.section-label {
     text-align: center;
-    padding: 2em 0em 1em 0em;
-
+    padding: 1em 0em 1em 0em;
   }
 
   .responsive-table td::before {
@@ -119,7 +123,6 @@ td > input:focus {
   
   .ects-cell, .grade-cell {
     width: 100%;
-    
   }
 
   td {
@@ -139,13 +142,19 @@ td > input:focus {
   td > input:focus {
     border: none;
   }
+
+  .text-course {
+    overflow: unset;
+    white-space: unset;
+    text-align: center;
+  }
 }
 
-@media screen and (min-width: 481px) {
+/* @media screen and (min-width: 481px) {
   .ects-cell, .grade-cell {
     max-width: 3em;
   }
-}
+} */
 
 /* 
 gray:   #c7d3d4
