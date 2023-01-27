@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './MainPage.css'
+import Search from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/Search/Search';
+
 import checkmark from '/home/dimos/Desktop/ectsTool/ects-tool/src/checkmark.svg'
 import closemark from '/home/dimos/Desktop/ectsTool/ects-tool/src/empty.svg';
 
@@ -135,10 +137,13 @@ const MainPage = () => {
     setCourses([...courses, { course: "New course", ects: 0, grade: "" }])
   }
 
+  const [searchTerm, setSearchTerm] = useState('');
+
   return (
     <>
+    <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <table className="responsive-table">
-      <thead>
+        <thead>
           <tr>
             <td>55% wide</td>
             <td>25% wide</td>
@@ -155,6 +160,7 @@ const MainPage = () => {
         <tbody id="section-compulsory">
           {courses
           .filter(course => course.type === "compulsory")
+          .filter(course => course.course.toLowerCase().includes(searchTerm.toLowerCase()))
           .map((course, index) => (
             <tr className="course-row" key={index}>
               <td data-label="" className="course-cell" title={course.course}>
