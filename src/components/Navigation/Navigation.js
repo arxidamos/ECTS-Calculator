@@ -26,7 +26,6 @@ const Navigation = () => {
             ECTS Calculator
               <img className="logo" src={logo} alt="website logo" />
           </NavLink>
-
           <ul className={click ? "nav-menu active" : "nav-menu"}>
             <li className="nav-item">
               <NavLink

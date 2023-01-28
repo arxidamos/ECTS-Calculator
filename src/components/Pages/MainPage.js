@@ -5,6 +5,20 @@ import Search from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/Search
 import checkmark from '/home/dimos/Desktop/ectsTool/ects-tool/src/checkmark.svg'
 import closemark from '/home/dimos/Desktop/ectsTool/ects-tool/src/empty.svg';
 
+const sanitize = (string) => {
+  return string
+    .toLowerCase()
+    .replace(/ά/g, "α")
+    .replace(/έ/g, "ε")
+    .replace(/ί/g, "ι")
+    .replace(/ή/g, "η")
+    .replace(/ό/g, "ο")
+    .replace(/ώ/g, "ω")
+    .replace(/ύ/g, "υ")
+    .replace(/\s/g, "")
+  ;
+};
+
 const MainPage = () => {
   const [courses, setCourses] = useState([
     // Compulsory courses
@@ -160,7 +174,9 @@ const MainPage = () => {
         <tbody id="section-compulsory">
           {courses
           .filter(course => course.type === "compulsory")
-          .filter(course => course.course.toLowerCase().includes(searchTerm.toLowerCase()))
+          .filter(course => sanitize(course.course)
+            .includes(sanitize(searchTerm)
+            ))
           .map((course, index) => (
             <tr className="course-row" key={index}>
               <td data-label="" className="course-cell" title={course.course}>
