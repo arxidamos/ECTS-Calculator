@@ -23,7 +23,7 @@ const Search = ({ searchTerm, setSearchTerm }) => {
     <form>
       <input
         type="text"
-        placeholder="Search for a course"
+        placeholder="Αναζήτηση μαθήματος..."
         value={searchTerm}
         onChange={handleChange}
       />
