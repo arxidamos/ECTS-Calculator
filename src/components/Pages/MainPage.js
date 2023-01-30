@@ -192,10 +192,6 @@ const MainPage = () => {
   return (
     <>
       <StudentInfo track={track} setTrack={setTrack} specialization={specialization} setSpecialization={setSpecialization} />
-      <label className="switch">
-        <input type="checkbox" onChange={handleHighlight} />
-        <span className="slider round"></span>
-      </label>
       <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <table className="responsive-table">
         {
