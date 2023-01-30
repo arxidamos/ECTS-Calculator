@@ -1,5 +1,6 @@
 import React from 'react';
 import './Search.css'
+import searchIcon from '/home/dimos/Desktop/ectsTool/ects-tool/src/search.svg';
 
 const Search = ({ searchTerm, setSearchTerm }) => {
   const handleChange = (e) => {
@@ -7,7 +8,8 @@ const Search = ({ searchTerm, setSearchTerm }) => {
   };
 
   return (
-    <form>
+    <form className="search-form">
+      <img className="seach-icon" src={searchIcon} alt="Search Icon" />
       <input
         type="text"
         placeholder="Αναζήτηση μαθήματος..."
