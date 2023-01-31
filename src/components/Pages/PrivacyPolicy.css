@@ -1,0 +1,27 @@
+.privacy-policy {
+  margin: 1em 2em;
+  margin: auto;
+  max-width: 700px;
+  /* padding-left: 2em; */
+}
+
+.privacy-policy > p {
+  text-align: left;
+  margin: 1em 2em;
+}
+
+.privacy-policy > h3 {
+  text-align: left;
+  margin-left: 1.7em;
+}
+
+.privacy-policy a {
+  font-weight: bold;
+  color: #195190;
+  text-decoration: none;
+}
+
+.privacy-policy a:hover {
+  color: #111;
+}
+

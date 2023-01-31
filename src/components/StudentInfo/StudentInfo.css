@@ -101,9 +101,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(39px);
-  -ms-transform: translateX(39px);
-  transform: translateX(39px);
+  -webkit-transform: translateX(41px);
+  -ms-transform: translateX(41px);
+  transform: translateX(41px);
 }
 
 /* Rounded sliders */

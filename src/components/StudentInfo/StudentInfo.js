@@ -1,5 +1,6 @@
 import React from 'react';
 import "./StudentInfo.css"
+import { useEffect } from "react";
 
 const StudentInfo = ({ track, setTrack, specialization, setSpecialization }) => {
 
