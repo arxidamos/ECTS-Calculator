@@ -1,3 +1,25 @@
+# TO - DO
+1. About page
+2. Contact us page
+3. Terms of service
+4. Switch to only greek
+5. Icon for logo
+6. Implement add course button and functionality
+7. Highlight courses left
+8. Show x-bullet instructions:
+  i.   Μ.Ο. ως τώρα: 
+  ii.  Υπόλοιπο ECTS: (`240/260, left: 20`)
+  iii. Υπόλοιπο Μαθημάτων:
+       a. Υποχρεωτικά: highlight ones left
+       b. Κατ' επιλογή Υποχρεωτικά: highlight eligible ones, based on Track, say you've got 3/8 passed
+       c. Project: highlight eligible ones, if none of the 2 eligible passed
+       d. Γενικής παιδείας: highlight ones left
+       e. Πτυχιακή / Πρακτική: highlight ones left
+       f. Προαιρετικά: highlight eligible ones, based on Specializaition, say you've got 3/8 passed
+  iv. If ALL READY, show a green mark sign
+9. Implement παιδαγωγική επάρκεια
+10. Implement xls/json export/import. 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

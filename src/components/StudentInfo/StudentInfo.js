@@ -1,8 +1,14 @@
 import React from 'react';
 import "./StudentInfo.css"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const StudentInfo = ({ track, setTrack, specialization, setSpecialization }) => {
+const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highlight, setHighlight, findAverage }) => {
+  const {average, totalEcts} = findAverage()
+  const [isChecked, setIsChecked] = useState(
+    !localStorage.getItem('isChecked')
+    ? false
+    : JSON.parse(localStorage.getItem('isChecked'))
+  );
 
   const handleTrackChange = event => {
     setTrack(event.target.value);
@@ -11,6 +17,23 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization }) => 
   const handleSpecializationChange = event => {
     setSpecialization(event.target.value);
   };
+
+  const handleHighlight = (e) => {
+    setHighlight(!highlight);
+    setIsChecked(e.target.checked);
+    localStorage.setItem("isChecked", JSON.stringify(e.target.checked));
+  }
+
+  // Each time component refreshes, retrieve from localStorage
+  useEffect(() => {
+    const storedCheckedValue = localStorage.getItem('isChecked');
+    setIsChecked(JSON.parse(storedCheckedValue) || false);
+  }, [])
+
+  // Each time isChecked is changed, update localStorage
+  useEffect(() => {
+    localStorage.setItem('isChecked', JSON.stringify(isChecked));
+  }, [isChecked]);
 
   return (
     <form className="student-info-form">
@@ -24,8 +47,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization }) => 
         className="grid-item "
         id="specialization"
         value={specialization}
-        onChange={handleSpecializationChange}
-      >
+        onChange={handleSpecializationChange}>
         {track === 'A' ? (
           <>
             <option value={1}>S1: Θεμελιώσεις της Πληροφορικής</option>
@@ -47,10 +69,59 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization }) => 
         Υπολογισμός Πτυχίου:
       </label>
       <label className="switch">
-        <input id="showHints" type="checkbox" />
-         {/* onChange={handleHighlight} /> */}
+        <input id="showHints" type="checkbox" onChange={handleHighlight} checked={isChecked}/>
         <span className="slider round"></span>
       </label>
+      <div className={isChecked ? "leftCoursesInfo " : "leftCoursesInfo no-display"}>
+        <div className="grid-item">
+          ECTS:
+        </div>
+        <div className="grid-item grid-right">
+          {totalEcts} / 240
+        </div>
+        <div className="grid-item">
+          Μέσος όρος:
+        </div>
+        <div className="grid-item grid-right">
+          {average}
+        </div>
+        <div className="grid-item">
+          Υποχρεωτικά:
+        </div>
+        <div className="grid-item grid-right">
+          4 από 8 (γαλάζιο χρώμα)
+        </div>
+        <div className="grid-item">
+          Γενικής παιδείας:
+        </div>
+        <div className="grid-item grid-right">
+          1 από 3 (γαλάζιο χρώμα)
+        </div>
+        <div className="grid-item">
+          Υποχρεωτικά Κατεύθυνσης:
+        </div>
+        <div className="grid-item grid-right">
+          3 από 6 (πράσινο χρώμα)
+        </div>
+        <div className="grid-item">
+          Project:
+        </div>
+        <div className="grid-item grid-right">
+          1 (γαλάζιο χρώμα)
+        </div>
+        <div className="grid-item">
+          Πρακτική / Πτυχιακή:
+        </div>
+        <div className="grid-item grid-right">
+          1 από 2
+        </div>
+        <div className="grid-item">
+          Προαιρετικά ειδικότητας:
+        </div>
+        <div className="grid-item grid-right">
+          4 από 8 (κίτρινο χρώμα)
+        </div>
+      </div>
     </form>
   );
 };

@@ -1,42 +1,19 @@
-/* .student-info-form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1em;
-  justify-items: center;
-  margin-bottom: 1em;
-}
-
-label.grid-item {
-  margin-top: 1em;
-  margin-left: 1em;
-  margin-right: auto;
-}
-
-select.grid-item  {
-margin-left: 1em;
-
-  margin: auto;
-} */
-
 select {
-  /* font-size: 14px; */
   padding: .5em;
-  /* height: 3em; */
-  /* background-color: #fff; */
   border: 1px solid #ccc;
-  /* border-radius: 5px; */
   color: #195190;
+  cursor: pointer;
 }
 
-
+select:focus {
+  font-weight: 100;
+}
 
 .student-info-form {
   display: grid;
-  /* grid-template-columns: repeat(2, 1fr); */
   grid-template-columns: auto 1fr;
   gap: 10px;
   margin-bottom: 1em;
-  padding-bottom: 1em;
 }
 
 .grid-item {
@@ -46,17 +23,42 @@ select {
   margin-left: 1em;
 }
 
+.grid-right {
+  align-self: flex-end;
+  justify-self: flex-start;
+  margin-left: 2em;
+}
+
+
 select.grid-item, .switch {
   margin-right: 5em;
 }
+
+.leftCoursesInfo {
+  grid-column: 1 / 3;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  padding-bottom: 1em;
+  border-top: 2px solid #195190;
+  transition: .5s visibility ease-in-out, opacity 1s ease-in-out;
+  height: auto;
+}
+
+.no-display {
+  z-index: -1;
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+  transition: 0s visibility ease-in-out, opacity 0s ease-in-out;
+}
+
 
 .switch {
   position: relative;
   display: inline-block;
   width: 72px;
   height: 32px;
-  /* height: 26px; */
-  /* border: 1px solid black; */
   align-self: flex-end;
   justify-self: center;
   margin-top: 1em;
@@ -106,11 +108,45 @@ input:checked + .slider:before {
   transform: translateX(41px);
 }
 
-/* Rounded sliders */
 .slider.round {
   border-radius: 18px;
 }
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+
+
+@media screen and (max-width: 480px) {
+  .student-info-form {
+    display: flex;
+    flex-direction: column;
+    background-color: red;
+    /* justify-items: center; */
+
+  }
+
+  .leftCoursesInfo {
+    display: flex;
+    flex-direction: column;
+    background-color: teal;
+  }
+
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 72px;
+    height: 32px;
+    align-self: flex-start;
+    /* justify-self: flex-start; */
+    margin-top: 1em;
+    margin-left: 1em;
+  }
+
+  .grid-right {
+
+  }
+  
 }
