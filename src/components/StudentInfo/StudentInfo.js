@@ -2,8 +2,10 @@ import React from 'react';
 import "./StudentInfo.css"
 import { useEffect, useState } from "react";
 
-const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highlight, setHighlight, findAverage }) => {
-  const {average, totalEcts} = findAverage()
+const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highlight, setHighlight, findAverage, findCoursesPassed }) => {
+  const {average, totalEcts} = findAverage();
+  const {compTotal, compPassed, genEduTotal, genEduPassed, thesisTotal, thesisPassed} = findCoursesPassed();
+
   const [isChecked, setIsChecked] = useState(
     !localStorage.getItem('isChecked')
     ? false
@@ -72,7 +74,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
         <input id="showHints" type="checkbox" onChange={handleHighlight} checked={isChecked}/>
         <span className="slider round"></span>
       </label>
-      <div className={isChecked ? "leftCoursesInfo " : "leftCoursesInfo no-display"}>
+      <div className={isChecked ? "passedCoursesInfo " : "passedCoursesInfo no-display"}>
         <div className="grid-item">
           ECTS:
         </div>
@@ -89,13 +91,13 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
           Υποχρεωτικά:
         </div>
         <div className="grid-item grid-right">
-          4 από 8 (γαλάζιο χρώμα)
+          {compPassed} από {compTotal} (γαλάζιο χρώμα)
         </div>
         <div className="grid-item">
           Γενικής παιδείας:
         </div>
         <div className="grid-item grid-right">
-          1 από 3 (γαλάζιο χρώμα)
+          {genEduPassed} από {genEduTotal} (γαλάζιο χρώμα)
         </div>
         <div className="grid-item">
           Υποχρεωτικά Κατεύθυνσης:
@@ -113,7 +115,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
           Πρακτική / Πτυχιακή:
         </div>
         <div className="grid-item grid-right">
-          1 από 2
+          {thesisPassed} από {thesisTotal}
         </div>
         <div className="grid-item">
           Προαιρετικά ειδικότητας:

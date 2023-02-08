@@ -278,6 +278,7 @@ const MainPage = () => {
     localStorage.setItem('average', JSON.stringify(ectsAverage));
   }, [ectsAverage]);
 
+  // Calculate average grade
   const findAverage = () => {
     const filteredCourses = courses.filter(course => course.dontCalc !== true)
     const { sum, totalEcts } = calculateAverageAux(filteredCourses);
@@ -287,9 +288,33 @@ const MainPage = () => {
     };
   };
 
+  // Sum all courses Passed per category
+  const findCoursesPassed = () => {
+    // Compulsory
+    const compTotal = courses.filter(course => course.type === "compulsory");
+    const compPassed = compTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+
+    // General Education
+    const genEduTotal = courses.filter(course => course.type === "general-edu");
+    const genEduPassed = genEduTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+
+    // Thesis
+    const thesisTotal = courses.filter(course => course.type === "thesis");
+    const thesisPassed = thesisTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+
+    return {
+      compTotal: compTotal.length,
+      compPassed: compPassed.length,
+      genEduTotal: genEduTotal.length,
+      genEduPassed: genEduPassed.length,
+      thesisTotal: thesisTotal.length,
+      thesisPassed: thesisPassed.length
+    };
+  };
+
   return (
     <>
-      <StudentInfo track={track} setTrack={setTrack} specialization={specialization} setSpecialization={setSpecialization} highlight={highlight} setHighlight={setHighlight} findAverage={findAverage}/>
+      <StudentInfo track={track} setTrack={setTrack} specialization={specialization} setSpecialization={setSpecialization} highlight={highlight} setHighlight={setHighlight} findAverage={findAverage} findCoursesPassed={findCoursesPassed}/>
       <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <table className="responsive-table">
         {
