@@ -96,8 +96,10 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
         <div className="grid-item">
           Γενικής παιδείας:
         </div>
-        <div className="grid-item grid-right">
-          {genEduPassed} από {genEduTotal} (γαλάζιο χρώμα)
+        <div className="info-container">
+          <div className="grid-item grid-right">
+            {genEduPassed} από {genEduTotal} (γαλάζιο χρώμα)
+          </div>
         </div>
         <div className="grid-item">
           Υποχρεωτικά Κατεύθυνσης:

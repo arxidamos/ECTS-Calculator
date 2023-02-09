@@ -122,15 +122,14 @@ input:checked + .slider:before {
   .student-info-form {
     display: flex;
     flex-direction: column;
-    background-color: red;
     /* justify-items: center; */
-
+    padding-top: 1em;
   }
 
   .passedCoursesInfo {
     display: flex;
     flex-direction: column;
-    background-color: teal;
+    padding-top: 1em;
   }
 
 
@@ -141,12 +140,37 @@ input:checked + .slider:before {
     height: 32px;
     align-self: flex-start;
     /* justify-self: flex-start; */
-    margin-top: 1em;
+    margin-top: 0em;
     margin-left: 1em;
   }
 
-  .grid-right {
+  .grid-item {
+    display: flex;
+    /* align-items: center; */
+    /* justify-content: center; */
+    margin-top: 0em;
+    /* margin-left: 0em; */
+  }
 
+  select.grid-item, .switch {
+    /* border-bottom: 1px solid #195190; */
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 1em;
   }
   
+  .grid-right {
+    align-self: flex-start;
+    justify-self: flex-start;
+    margin-left: 1em;
+    margin-bottom: 1em;
+
+  }
+ 
+  .info-container {
+    border-bottom: 1px solid #ccc;
+    /* color: #fff; */
+    /* background-color: #ccc; */
+
+  }
 }
