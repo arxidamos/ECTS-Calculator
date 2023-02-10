@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '/home/dimos/Desktop/ectsTool/ects-tool/src/logo.svg';
 import burger from '/home/dimos/Desktop/ectsTool/ects-tool/src/menu.svg';
@@ -8,6 +8,7 @@ import './Navigation.css';
 
 const Navigation = () => {
   const [click, setClick] = useState(false);
+  const navRef = useRef(null);
 
   const handleClick = () => {
     setClick(!click);
@@ -18,9 +19,23 @@ const Navigation = () => {
     setClick(false);
   }
 
+  // Close the menu when a click occurs outside of it
+  const handleClickOutside = (e) => {
+    if (navRef.current && !navRef.current.contains(e.target)) {
+      setClick(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
+
   return (
     <>
-      <nav className="navbar">
+      <nav className="navbar" ref={navRef}>
         <div className="nav-container">
           <NavLink to="/" className="nav-logo" onClick={closeMenu}>
             ECTS Calculator

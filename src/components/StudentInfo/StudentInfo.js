@@ -39,12 +39,12 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
 
   return (
     <form className="student-info-form">
-      <label className="grid-item" htmlFor="track">Κατεύθυνση:</label>
+      <label className="grid-item" htmlFor="track">Κατεύθυνση</label>
       <select className="grid-item" id="track" value={track} onChange={handleTrackChange}>
         <option value="A">A: Επιστήμη Υπολογιστών</option>
         <option value="B">B: Μηχανική Υπολογιστών & Τηλεπικοινωνιών </option>
       </select>
-      <label className="grid-item" htmlFor="specialization">Ειδικότητα:</label>
+      <label className="grid-item" htmlFor="specialization">Ειδικότητα</label>
       <select
         className="grid-item "
         id="specialization"
@@ -68,7 +68,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
       </select>
       {/* <button type="submit">Submit</button> */}
       <label className="grid-item" htmlFor="showHints">
-        Υπολογισμός Πτυχίου:
+        Υπολογισμός Πτυχίου
       </label>
       <label className="switch">
         <input id="showHints" type="checkbox" onChange={handleHighlight} checked={isChecked}/>
@@ -76,25 +76,25 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
       </label>
       <div className={isChecked ? "passedCoursesInfo " : "passedCoursesInfo no-display"}>
         <div className="grid-item">
-          ECTS:
+          ECTS
         </div>
         <div className="grid-item grid-right">
           {totalEcts} / 240
         </div>
         <div className="grid-item">
-          Μέσος όρος:
+          Μέσος όρος
         </div>
         <div className="grid-item grid-right">
           {average}
         </div>
         <div className="grid-item">
-          Υποχρεωτικά:
+          Υποχρεωτικά
         </div>
         <div className="grid-item grid-right">
           {compPassed} από {compTotal} (γαλάζιο χρώμα)
         </div>
         <div className="grid-item">
-          Γενικής παιδείας:
+          Γενικής παιδείας
         </div>
         <div className="info-container">
           <div className="grid-item grid-right">
@@ -102,25 +102,25 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
           </div>
         </div>
         <div className="grid-item">
-          Υποχρεωτικά Κατεύθυνσης:
+          Υποχρεωτικά Κατεύθυνσης
         </div>
         <div className="grid-item grid-right">
           3 από 6 (πράσινο χρώμα)
         </div>
         <div className="grid-item">
-          Project:
+          Project
         </div>
         <div className="grid-item grid-right">
           1 (γαλάζιο χρώμα)
         </div>
         <div className="grid-item">
-          Πρακτική / Πτυχιακή:
+          Πρακτική / Πτυχιακή
         </div>
         <div className="grid-item grid-right">
           {thesisPassed} από {thesisTotal}
         </div>
         <div className="grid-item">
-          Προαιρετικά ειδικότητας:
+          Προαιρετικά ειδικότητας
         </div>
         <div className="grid-item grid-right">
           4 από 8 (κίτρινο χρώμα)

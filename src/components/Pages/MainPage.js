@@ -37,7 +37,6 @@ const calculateAverageAux = (filteredCourses) =>
       accum.totalEcts += parseInt(ects, 10);
     }
   }
-  console.log(accum);
   return accum;
 }, { sum: 0, totalEcts: 0});
 
