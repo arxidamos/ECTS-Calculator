@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highlight, setHighlight, findAverage, findCoursesPassed }) => {
   const {average, totalEcts} = findAverage();
-  const {compTotal, compPassed, genEduTotal, genEduPassed, thesisTotal, thesisPassed} = findCoursesPassed();
+  const {compTotal, compPassed, genEduTotal, genEduPassed, thesisTotal, thesisPassed, trackCompSpecTotal, trackCompSpecPassed} = findCoursesPassed();
 
   const [isChecked, setIsChecked] = useState(
     !localStorage.getItem('isChecked')
@@ -67,7 +67,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
         )}
       </select>
       {/* <button type="submit">Submit</button> */}
-      <label className="grid-item" htmlFor="showHints">
+      <label className="grid-item last-item" htmlFor="showHints">
         Υπολογισμός Πτυχίου
       </label>
       <label className="switch">
@@ -105,7 +105,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
           Υποχρεωτικά Κατεύθυνσης
         </div>
         <div className="grid-item grid-right">
-          3 από 6 (πράσινο χρώμα)
+          {trackCompSpecPassed} από {trackCompSpecTotal} (πράσινο χρώμα)
         </div>
         <div className="grid-item">
           Project

@@ -64,6 +64,7 @@ td > input {
 
 .course-row:hover td, .course-row:hover .course-input {
   background-color: #fff;
+  /* filter: brightness(110%); */
 }
 
 td >input:hover {
@@ -150,9 +151,37 @@ td > input:focus {
   }
 }
 
+.highlighted-row-track .course-input, .highlighted-row-track {
+  background-color: #60BBD0;
+}
 
+.highlighted-row-track:hover td, .highlighted-row-track:hover .course-input {
+  
+  background-color: #30C5FF;
+}
 
+.highlighted-row-spec .course-input, .highlighted-row-spec {
+  background-color: #5DE23C;
+}
 
-.highlighted {
-  background-color: lightgreen;
+.highlighted-row-spec:hover td, .highlighted-row-spec:hover .course-input {
+  
+  background-color: #49fb35;
+}
+
+.course-cell {
+  /* position: absolute; */
+}
+
+.info-tip {
+  position: relative;
+}
+
+.info-tip-span {
+  font-size: 10px;
+  font-stretch: semi-condensed;
+  color: blue;
+  position: absolute;
+  right: 0em;
+  top: 4px;
 }

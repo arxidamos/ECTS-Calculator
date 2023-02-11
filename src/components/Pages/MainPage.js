@@ -40,7 +40,42 @@ const calculateAverageAux = (filteredCourses) =>
   return accum;
 }, { sum: 0, totalEcts: 0});
 
+const filterTrackCompCourses = (courses, track, specialization) => {
+  let trackCourses = []
+  let specializationCourses = [];
+
+  // Add courses availbale for this Track (bar those necessary for the Specialization)
+  if (track === "A") {
+    trackCourses = courses.filter(course =>
+      (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
+      &&
+      (!course.neededFor.includes(`s${specialization}`))
+    );
+  }
+  else if (track === "B") {
+    trackCourses = courses.filter(course =>
+      (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
+      &&
+      (!course.neededFor.includes(`s${specialization}`))
+    );
+  }
+
+  if (specialization !== "7") {
+    specializationCourses = courses.filter(course =>
+      course.neededFor.includes(`s${specialization}`)
+    );
+  }
+  return {trackCompTotal: trackCourses, specializationTotal: specializationCourses}
+};
+  
+const InfoTip = ({ text }) => (
+  <span className="info-tip-span">
+    &#42; {text}
+  </span>
+);
+
 const MainPage = () => {
+  const [rowClasses, setRowClasses] = useState({});
   // Get courses from localStorage, otherwise use inital courses array
   const [courses, setCourses] = useState(
     !localStorage.getItem('courses')
@@ -182,6 +217,18 @@ const MainPage = () => {
     : JSON.parse(localStorage.getItem('specialization'))
   );
   
+  // const [trackCoursesTotal, setTrackCoursesTotal] = useState(
+  //   !localStorage.getItem('trackCoursesTotal')
+  //   ? {}
+  //   : JSON.parse(localStorage.getItem('trackCoursesTotal'))
+  // )
+
+  // const [specializationCoursesTotal, setspecializationCoursesTotal] = useState(
+  //   !localStorage.getItem('specializationCoursesTotal')
+  //   ? {}
+  //   : JSON.parse(localStorage.getItem('specializationCoursesTotal'))
+  // )
+
   const [highlight, setHighlight] = useState(
     !localStorage.getItem('highlight')
     ? false
@@ -287,6 +334,23 @@ const MainPage = () => {
     };
   };
 
+  // const markRows = (courses) => {
+  //   let classes = {};
+  //   courses.forEach(course => {
+  //     if (course in trackCoursesTotal) {
+  //       classes[course.course] ="course-row highlighted-row";
+  //     }
+  //     else {
+  //       classes[course.course] ="course-row";
+  //     }
+  //   });
+  //   return classes;
+  // };
+
+  // useEffect(() => {
+  //   setRowClasses(markRows(courses));
+  // }, [courses]);
+
   // Sum all courses Passed per category
   const findCoursesPassed = () => {
     // Compulsory
@@ -301,15 +365,87 @@ const MainPage = () => {
     const thesisTotal = courses.filter(course => course.type === "thesis");
     const thesisPassed = thesisTotal.filter(course => course.grade >= 5 && course.grade <= 10);
 
+    // Track compulsory (calculate separately those needed for spec and those available for track)
+    const trackCompCoursesAll = courses.filter(course => course.type === "track-compulsory");
+    const trackAndSpecTotal = filterTrackCompCourses(trackCompCoursesAll, track, specialization);
+    const trackCompPassed = trackAndSpecTotal.trackCompTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+    const specializationPassed = trackAndSpecTotal.specializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+
+    // setTrackCoursesTotal(trackAndSpecTotal.trackCompTotal);
+    // setspecializationCoursesTotal(trackAndSpecTotal.specializationTotal);
+
     return {
       compTotal: compTotal.length,
       compPassed: compPassed.length,
       genEduTotal: genEduTotal.length,
       genEduPassed: genEduPassed.length,
       thesisTotal: thesisTotal.length,
-      thesisPassed: thesisPassed.length
+      thesisPassed: thesisPassed.length,
+      trackCompSpecTotal: 4,
+      trackCompSpecPassed: (trackCompPassed.length + specializationPassed.length),
     };
   };
+
+  // Set tr class based on Track and Specialization
+  const getClassName = (course) => {
+    if (track === "A") {
+      if (course.neededFor) {
+        // Course is needed for current Specialization of Track "A"
+        if ( 
+          (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
+          &&
+          (!course.neededFor.includes(`s${specialization}`))
+          ) {
+          return "course-row highlighted-row-track"
+        }
+        else if (
+          (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
+          &&
+          (course.neededFor.includes(`s${specialization}`))
+          ) {
+            return "course-row highlighted-row-spec"
+          }
+        else {
+          return "course-row"
+        }
+      }
+      else {
+        return "course-row"
+      }
+    }
+    else if (track === "B") {
+      if (course.neededFor) {
+        if (course.neededFor) {
+          // Course is needed for current Specialization of Track "B"
+          if ( 
+            (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
+            &&
+            (!course.neededFor.includes(`s${specialization}`))
+            ) {
+            return "course-row highlighted-row-track"
+          }
+          else if (
+            (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
+            &&
+            (course.neededFor.includes(`s${specialization}`))
+            ) {
+              return "course-row highlighted-row-spec"
+            }
+          else {
+            return "course-row"
+          }
+        }
+        else {
+          return "course-row"
+        }
+      }
+    }  
+    // if (specialization !== "7") {
+    //   specializationCourses = courses.filter(course =>
+    //     course.neededFor.includes(`s${specialization}`)
+    //   );
+    // }
+  }
 
   return (
     <>
@@ -357,8 +493,11 @@ const MainPage = () => {
                     .includes(sanitize(searchTerm)
                     ))
                   .map((course, index) => (
-                    <tr className="course-row" key={courses.findIndex(item => item.course === course.course)}>
+                    // <tr className="course-row" key={courses.findIndex(item => item.course === course.course)}>
+                    <tr className={getClassName(course)} key={courses.findIndex(item => item.course === course.course)}>
+
                       <td data-label="" className="course-cell" title={course.course}>
+                      {getClassName(course).includes("highlighted-row-spec") ? <InfoTip className="info-tip" text="This row is highlighted"/> : null}
                         <div className="course-text-container">
                           <div className="img-course">
                             {course.completed ? <img className="checkmark-img" src={checkmark} alt="Completed" /> : <img className="checkmark-img" src={closemark} alt="Completed" />}
