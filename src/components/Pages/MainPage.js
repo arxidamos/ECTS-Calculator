@@ -75,7 +75,6 @@ const InfoTip = ({ text }) => (
 );
 
 const MainPage = () => {
-  const [rowClasses, setRowClasses] = useState({});
   // Get courses from localStorage, otherwise use inital courses array
   const [courses, setCourses] = useState(
     !localStorage.getItem('courses')
@@ -119,10 +118,10 @@ const MainPage = () => {
       { course: "Μεταγλωττιστές", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "s3", specialization: "s4" },
 
       // Projects
-      { course: "Ανάπτυξη Λογισμικού για Αλγοριθμικά Προβλήματα", ects: 8, grade: "", type: "project", semester: "7ο" },
-      { course: "Ανάπτυξη Λογισμικού για Πληροφοριακά Συστήματα", ects: 8, grade: "", type: "project", semester: "7ο" },
-      { course: "Ανάπτυξη Λογισμικού για Συστήματα Δικτύων και Τηλεπικοινωνιών", ects: 8, grade: "", type: "project", semester: "7ο" },
-      { course: "Ανάπτυξη Υλικού - Λογισμικού για Ενσωματωμένα Συστήματα", ects: 8, grade: "", type: "project", semester: "8ο" },
+      { course: "Ανάπτυξη Λογισμικού για Αλγοριθμικά Προβλήματα", ects: 8, grade: "", type: "project", semester: "7ο", projectFor: "A" },
+      { course: "Ανάπτυξη Λογισμικού για Πληροφοριακά Συστήματα", ects: 8, grade: "", type: "project", semester: "7ο", projectFor: "A" },
+      { course: "Ανάπτυξη Λογισμικού για Συστήματα Δικτύων και Τηλεπικοινωνιών", ects: 8, grade: "", type: "project", semester: "7ο", projectFor: "B" },
+      { course: "Ανάπτυξη Υλικού - Λογισμικού για Ενσωματωμένα Συστήματα", ects: 8, grade: "", type: "project", semester: "8ο", projectFor: "B" },
 
       // General education courses
       { course: "Εισαγωγή στην Πληροφορική και στις Τηλεπικοινωνίες", ects: 2, grade: "", type: "general-edu", semester: "1ο" },
@@ -388,9 +387,9 @@ const MainPage = () => {
 
   // Set tr class based on Track and Specialization
   const getClassName = (course) => {
-    if (track === "A") {
+    if (track === "A" && highlight) {
       if (course.neededFor) {
-        // Course is needed for current Specialization of Track "A"
+        // Course is available for Track "A" but not needed for current Specialization
         if ( 
           (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
           &&
@@ -398,13 +397,23 @@ const MainPage = () => {
           ) {
           return "course-row highlighted-row-track"
         }
+        // Course is needed for current Specialization of Track "A"
         else if (
           (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
           &&
           (course.neededFor.includes(`s${specialization}`))
           ) {
-            return "course-row highlighted-row-spec"
-          }
+          return "course-row highlighted-row-spec"
+        }
+        else {
+          return "course-row"
+        }
+      }
+      else if (course.type === "project") {
+        // Course is 1 of the 2 needed projects
+        if (course.projectFor === "A") {
+          return "course-row highlighted-row-project"
+        }
         else {
           return "course-row"
         }
@@ -413,33 +422,43 @@ const MainPage = () => {
         return "course-row"
       }
     }
-    else if (track === "B") {
+    else if (track === "B" && highlight) {
       if (course.neededFor) {
-        if (course.neededFor) {
-          // Course is needed for current Specialization of Track "B"
-          if ( 
-            (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
-            &&
-            (!course.neededFor.includes(`s${specialization}`))
-            ) {
-            return "course-row highlighted-row-track"
-          }
-          else if (
-            (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
-            &&
-            (course.neededFor.includes(`s${specialization}`))
-            ) {
-              return "course-row highlighted-row-spec"
-            }
-          else {
-            return "course-row"
-          }
+        // Course is needed for current Specialization of Track "B"
+        if ( 
+          (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
+          &&
+          (!course.neededFor.includes(`s${specialization}`))
+          ) {
+          return "course-row highlighted-row-track"
+        }
+        else if (
+          (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
+          &&
+          (course.neededFor.includes(`s${specialization}`))
+          ) {
+          return "course-row highlighted-row-spec"
         }
         else {
           return "course-row"
         }
       }
-    }  
+      else if (course.projectFor) {
+        // Course is 1 of the 2 needed projects
+        if (course.projectFor === "B") {
+          return "course-row highlighted-row-project"
+        }
+        else {
+          return "course-row"
+        }
+      }
+      else {
+        return "course-row"
+      }
+    }
+    else {
+      return "course-row";
+    }
     // if (specialization !== "7") {
     //   specializationCourses = courses.filter(course =>
     //     course.neededFor.includes(`s${specialization}`)
@@ -497,7 +516,14 @@ const MainPage = () => {
                     <tr className={getClassName(course)} key={courses.findIndex(item => item.course === course.course)}>
 
                       <td data-label="" className="course-cell" title={course.course}>
-                      {getClassName(course).includes("highlighted-row-spec") ? <InfoTip className="info-tip" text="This row is highlighted"/> : null}
+                        {getClassName(course).includes("highlighted-row-spec")
+                          ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ ΓΙΑ ΤΗΝ ΕΙΔΙΚΟΤΗΤΑ"/>
+                          : getClassName(course).includes("highlighted-row-track")
+                            ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ - ΧΡΕΙΑΖΟΝΤΑΙ 2"/>
+                            : getClassName(course).includes("highlighted-row-project")
+                              ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ PROJECT - ΧΡΕΙΑΖΕΤΑΙ 1"/>
+                              : null
+                        }
                         <div className="course-text-container">
                           <div className="img-course">
                             {course.completed ? <img className="checkmark-img" src={checkmark} alt="Completed" /> : <img className="checkmark-img" src={closemark} alt="Completed" />}
