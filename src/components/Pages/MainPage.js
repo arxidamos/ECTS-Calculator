@@ -387,84 +387,44 @@ const MainPage = () => {
 
   // Set tr class based on Track and Specialization
   const getClassName = (course) => {
-    if (track === "A" && highlight) {
-      if (course.neededFor) {
-        // Course is available for Track "A" but not needed for current Specialization
-        if ( 
-          (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
-          &&
-          (!course.neededFor.includes(`s${specialization}`))
-          ) {
-          return "course-row highlighted-row-track"
+    let className = "course-row";
+    if (highlight) {
+      if (track === "A") {
+        if (course.neededFor) {
+          const isNeededForSpecialization = course.neededFor.includes(`s${specialization}`);
+          const isAvailableForTrackA = course.neededFor.split(";").some(s => ["s1", "s2", "s3"].includes(s));
+          // Course is available for Track "A" but not needed for current Specialization
+          if (isAvailableForTrackA && !isNeededForSpecialization) {
+            className = "course-row highlighted-row-track";
+          }
+          // Course is needed for current Specialization of Track "A"
+          else if (isAvailableForTrackA && isNeededForSpecialization) {
+            className = "course-row highlighted-row-spec";
+          }
+        } else if (course.projectFor === "A") {
+          className = "course-row highlighted-row-project";
         }
-        // Course is needed for current Specialization of Track "A"
-        else if (
-          (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
-          &&
-          (course.neededFor.includes(`s${specialization}`))
-          ) {
-          return "course-row highlighted-row-spec"
+      } else if (track === "B") {
+        if (course.neededFor) {
+          const isNeededForSpecialization = course.neededFor.includes(`s${specialization}`);
+          const isNeededForTrackB = course.neededFor.split(";").some(s => ["s4", "s5", "s6"].includes(s));
+          // Course is available for Track "B" but not needed for current Specialization
+          if (isNeededForTrackB && !isNeededForSpecialization) {
+            className = "course-row highlighted-row-track";
+          }
+          // Course is needed for current Specialization of Track "B"
+          else if (isNeededForTrackB && isNeededForSpecialization) {
+            className = "course-row highlighted-row-spec";
+          }
+        } else if (course.projectFor === "B") {
+          className = "course-row highlighted-row-project";
         }
-        else {
-          return "course-row"
-        }
-      }
-      else if (course.type === "project") {
-        // Course is 1 of the 2 needed projects
-        if (course.projectFor === "A") {
-          return "course-row highlighted-row-project"
-        }
-        else {
-          return "course-row"
-        }
-      }
-      else {
-        return "course-row"
       }
     }
-    else if (track === "B" && highlight) {
-      if (course.neededFor) {
-        // Course is needed for current Specialization of Track "B"
-        if ( 
-          (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
-          &&
-          (!course.neededFor.includes(`s${specialization}`))
-          ) {
-          return "course-row highlighted-row-track"
-        }
-        else if (
-          (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
-          &&
-          (course.neededFor.includes(`s${specialization}`))
-          ) {
-          return "course-row highlighted-row-spec"
-        }
-        else {
-          return "course-row"
-        }
-      }
-      else if (course.projectFor) {
-        // Course is 1 of the 2 needed projects
-        if (course.projectFor === "B") {
-          return "course-row highlighted-row-project"
-        }
-        else {
-          return "course-row"
-        }
-      }
-      else {
-        return "course-row"
-      }
-    }
-    else {
-      return "course-row";
-    }
-    // if (specialization !== "7") {
-    //   specializationCourses = courses.filter(course =>
-    //     course.neededFor.includes(`s${specialization}`)
-    //   );
-    // }
-  }
+    return className;
+  };
+
+  
 
   return (
     <>
@@ -517,7 +477,7 @@ const MainPage = () => {
 
                       <td data-label="" className="course-cell" title={course.course}>
                         {getClassName(course).includes("highlighted-row-spec")
-                          ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ ΓΙΑ ΤΗΝ ΕΙΔΙΚΟΤΗΤΑ"/>
+                          ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ"/>
                           : getClassName(course).includes("highlighted-row-track")
                             ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ - ΧΡΕΙΑΖΟΝΤΑΙ 2"/>
                             : getClassName(course).includes("highlighted-row-project")
