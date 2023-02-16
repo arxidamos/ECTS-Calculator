@@ -40,9 +40,10 @@ const calculateAverageAux = (filteredCourses) =>
   return accum;
 }, { sum: 0, totalEcts: 0});
 
-const filterTrackCompCourses = (courses, track, specialization) => {
+const filterTrackCompCourses = (courses, track, specialization, extraSpecialization) => {
   let trackCourses = []
   let specializationCourses = [];
+  let extraSpecializationCourses = [];
 
   // Add courses availbale for this Track (bar those necessary for the Specialization)
   if (track === "A") {
@@ -50,6 +51,8 @@ const filterTrackCompCourses = (courses, track, specialization) => {
       (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
       &&
       (!course.neededFor.includes(`s${specialization}`))
+      &&
+      (!course.neededFor.includes(`s${extraSpecialization}`))
     );
   }
   else if (track === "B") {
@@ -57,6 +60,8 @@ const filterTrackCompCourses = (courses, track, specialization) => {
       (course.neededFor.includes("s4") || course.neededFor.includes("s5") || course.neededFor.includes("s6"))
       &&
       (!course.neededFor.includes(`s${specialization}`))
+      &&
+      (!course.neededFor.includes(`s${extraSpecialization}`))
     );
   }
 
@@ -64,8 +69,16 @@ const filterTrackCompCourses = (courses, track, specialization) => {
     specializationCourses = courses.filter(course =>
       course.neededFor.includes(`s${specialization}`)
     );
+
+    extraSpecializationCourses = courses.filter(course =>
+      course.neededFor.includes(`s${extraSpecialization}`)
+    );
   }
-  return {trackCompTotal: trackCourses, specializationTotal: specializationCourses}
+  return {
+    trackCompTotal: trackCourses,
+    specializationTotal: specializationCourses,
+    extraSpecializationTotal : extraSpecializationCourses
+  }
 };
   
 const InfoTip = ({ text }) => (
@@ -216,17 +229,11 @@ const MainPage = () => {
     : JSON.parse(localStorage.getItem('specialization'))
   );
   
-  // const [trackCoursesTotal, setTrackCoursesTotal] = useState(
-  //   !localStorage.getItem('trackCoursesTotal')
-  //   ? {}
-  //   : JSON.parse(localStorage.getItem('trackCoursesTotal'))
-  // )
-
-  // const [specializationCoursesTotal, setspecializationCoursesTotal] = useState(
-  //   !localStorage.getItem('specializationCoursesTotal')
-  //   ? {}
-  //   : JSON.parse(localStorage.getItem('specializationCoursesTotal'))
-  // )
+  const [extraSpecialization, setExtraSpecialization] = useState(
+    !localStorage.getItem('extraSpecialization')
+    ? 7
+    : JSON.parse(localStorage.getItem('extraSpecialization'))
+  );
 
   const [highlight, setHighlight] = useState(
     !localStorage.getItem('highlight')
@@ -287,6 +294,11 @@ const MainPage = () => {
       setSpecialization(JSON.parse(storedSpecialization));
     }
 
+    const storedExtraSpecialization = localStorage.getItem('extraSpecialization');
+    if (storedExtraSpecialization) {
+      setExtraSpecialization(JSON.parse(storedExtraSpecialization));
+    }
+
     const storedHighlight = localStorage.getItem('highlight');
     if (storedHighlight) {
       setHighlight(JSON.parse(storedHighlight));
@@ -313,6 +325,11 @@ const MainPage = () => {
     localStorage.setItem('specialization', JSON.stringify(specialization));
   }, [specialization]);
 
+  // Each time extra specialization is changed, update localStorage
+  useEffect(() => {
+    localStorage.setItem('extraSpecialization', JSON.stringify(extraSpecialization));
+  }, [extraSpecialization]);
+
   // Each time highlight is changed, update localStorage
   useEffect(() => {
     localStorage.setItem('highlight', JSON.stringify(highlight));
@@ -333,23 +350,6 @@ const MainPage = () => {
     };
   };
 
-  // const markRows = (courses) => {
-  //   let classes = {};
-  //   courses.forEach(course => {
-  //     if (course in trackCoursesTotal) {
-  //       classes[course.course] ="course-row highlighted-row";
-  //     }
-  //     else {
-  //       classes[course.course] ="course-row";
-  //     }
-  //   });
-  //   return classes;
-  // };
-
-  // useEffect(() => {
-  //   setRowClasses(markRows(courses));
-  // }, [courses]);
-
   // Sum all courses Passed per category
   const findCoursesPassed = () => {
     // Compulsory
@@ -366,12 +366,10 @@ const MainPage = () => {
 
     // Track compulsory (calculate separately those needed for spec and those available for track)
     const trackCompCoursesAll = courses.filter(course => course.type === "track-compulsory");
-    const trackAndSpecTotal = filterTrackCompCourses(trackCompCoursesAll, track, specialization);
+    const trackAndSpecTotal = filterTrackCompCourses(trackCompCoursesAll, track, specialization, extraSpecialization);
     const trackCompPassed = trackAndSpecTotal.trackCompTotal.filter(course => course.grade >= 5 && course.grade <= 10);
     const specializationPassed = trackAndSpecTotal.specializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
-
-    // setTrackCoursesTotal(trackAndSpecTotal.trackCompTotal);
-    // setspecializationCoursesTotal(trackAndSpecTotal.specializationTotal);
+    const extraSpecializationPassed = trackAndSpecTotal.extraSpecializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
 
     return {
       compTotal: compTotal.length,
@@ -381,7 +379,7 @@ const MainPage = () => {
       thesisTotal: thesisTotal.length,
       thesisPassed: thesisPassed.length,
       trackCompSpecTotal: 4,
-      trackCompSpecPassed: (trackCompPassed.length + specializationPassed.length),
+      trackCompSpecPassed: (trackCompPassed.length + specializationPassed.length + extraSpecializationPassed.length),
     };
   };
 
@@ -428,7 +426,7 @@ const MainPage = () => {
 
   return (
     <>
-      <StudentInfo track={track} setTrack={setTrack} specialization={specialization} setSpecialization={setSpecialization} highlight={highlight} setHighlight={setHighlight} findAverage={findAverage} findCoursesPassed={findCoursesPassed}/>
+      <StudentInfo track={track} setTrack={setTrack} specialization={specialization} setSpecialization={setSpecialization} extraSpecialization={extraSpecialization} setExtraSpecialization={setExtraSpecialization} highlight={highlight} setHighlight={setHighlight} findAverage={findAverage} findCoursesPassed={findCoursesPassed}/>
       <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <table className="responsive-table">
         {

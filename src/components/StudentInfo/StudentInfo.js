@@ -2,7 +2,7 @@ import React from 'react';
 import "./StudentInfo.css"
 import { useEffect, useState } from "react";
 
-const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highlight, setHighlight, findAverage, findCoursesPassed }) => {
+const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extraSpecialization, setExtraSpecialization, highlight, setHighlight, findAverage, findCoursesPassed }) => {
   const {average, totalEcts} = findAverage();
   const {compTotal, compPassed, genEduTotal, genEduPassed, thesisTotal, thesisPassed, trackCompSpecTotal, trackCompSpecPassed} = findCoursesPassed();
 
@@ -19,6 +19,10 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
   const handleSpecializationChange = event => {
     setSpecialization(event.target.value);
   };
+
+  const handleExtraSpecializationChange = event => {
+    setExtraSpecialization(event.target.value);
+  }
 
   const handleHighlight = (e) => {
     setHighlight(!highlight);
@@ -50,21 +54,65 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, highl
         id="specialization"
         value={specialization}
         onChange={handleSpecializationChange}>
-        {track === 'A' ? (
-          <>
-            <option value={1}>S1: Θεμελιώσεις της Πληροφορικής</option>
-            <option value={2}>S2: Διαχείριση δεδομένων και γνώσης</option>
-            <option value={3}>S3: Λογισμικό</option>
-            <option value={7}>Χωρίς ειδίκευση</option>
-          </>
-        ) : (
-          <>
-            <option value={4}>S4: Υλικό και Αρχιτεκτονική</option>
-            <option value={5}>S5: Επικοινωνίες και Δικτύωση</option>
-            <option value={6}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
-            <option value={7}>Χωρίς ειδίκευση</option>
-          </>
-        )}
+        {track === 'A'
+          ? <>
+              <option value={1}>S1: Θεμελιώσεις της Πληροφορικής</option>
+              <option value={2}>S2: Διαχείριση δεδομένων και γνώσης</option>
+              <option value={3}>S3: Λογισμικό</option>
+              <option value={7}>Χωρίς ειδίκευση</option>
+            </>
+          : <>
+              <option value={4}>S4: Υλικό και Αρχιτεκτονική</option>
+              <option value={5}>S5: Επικοινωνίες και Δικτύωση</option>
+              <option value={6}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
+              <option value={7}>Χωρίς ειδίκευση</option>
+            </>
+        }
+      </select>
+      <label className="grid-item" htmlFor="extraSpecialization">Ειδικότητα Β´</label>
+      <select
+        className="grid-item "
+        id="extraSpecialization"
+        value={extraSpecialization}
+        onChange={handleExtraSpecializationChange}>
+        {track === 'A'
+          ? (specialization === 1
+            ? <>
+              <option value={2}>S2: Διαχείριση δεδομένων και γνώσης</option>
+              <option value={3}>S3: Λογισμικό</option>
+              <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+            </>
+            : specialization === 2
+              ? <>
+                <option value={1}>S1: Θεμελιώσεις της Πληροφορικής</option>
+                <option value={3}>S3: Λογισμικό</option>
+                <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+              </>
+              : <>
+                <option value={1}>S1: Θεμελιώσεις της Πληροφορικής</option>
+                <option value={2}>S2: Διαχείριση δεδομένων και γνώσης</option>
+                <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+              </>
+          )
+          : (specialization === 4
+            ? <>
+              <option value={5}>S5: Επικοινωνίες και Δικτύωση</option>
+              <option value={6}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
+              <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+            </>
+            : specialization === 5
+              ? <>
+                <option value={4}>S4: Υλικό και Αρχιτεκτονική</option>
+                <option value={6}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
+                <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+              </>
+              : <>
+                <option value={4}>S4: Υλικό και Αρχιτεκτονική</option>
+                <option value={5}>S5: Επικοινωνίες και Δικτύωση</option>
+                <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+              </>
+          )
+        }
       </select>
       {/* <button type="submit">Submit</button> */}
       <label className="grid-item last-item" htmlFor="showHints">
