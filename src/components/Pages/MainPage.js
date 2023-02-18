@@ -71,8 +71,9 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
     );
 
     extraSpecializationCourses = courses.filter(course =>
-      course.neededFor.includes(`s${extraSpecialization}`)
+      course.neededFor.includes(`s${extraSpecialization}`) && !course.neededFor.includes(`s${specialization}`)
     );
+    console.log(specializationCourses, extraSpecializationCourses)
   }
   return {
     trackCompTotal: trackCourses,
