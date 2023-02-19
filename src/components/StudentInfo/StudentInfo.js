@@ -56,16 +56,16 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
         onChange={handleSpecializationChange}>
         {track === 'A'
           ? <>
+              <option value={7}>Χωρίς ειδίκευση</option>
               <option value={1}>S1: Θεμελιώσεις της Πληροφορικής</option>
               <option value={2}>S2: Διαχείριση δεδομένων και γνώσης</option>
               <option value={3}>S3: Λογισμικό</option>
-              <option value={7}>Χωρίς ειδίκευση</option>
             </>
           : <>
+              <option value={7}>Χωρίς ειδίκευση</option>
               <option value={4}>S4: Υλικό και Αρχιτεκτονική</option>
               <option value={5}>S5: Επικοινωνίες και Δικτύωση</option>
               <option value={6}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
-              <option value={7}>Χωρίς ειδίκευση</option>
             </>
         }
       </select>
@@ -76,41 +76,49 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
         value={extraSpecialization}
         onChange={handleExtraSpecializationChange}>
         {track === 'A'
-          ? (specialization === 1
+          ? (specialization === '1'
             ? <>
-              <option value={2}>S2: Διαχείριση δεδομένων και γνώσης</option>
-              <option value={3}>S3: Λογισμικό</option>
-              <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+              <option value={'2'}>S2: Διαχείριση δεδομένων και γνώσης</option>
+              <option value={'3'}>S3: Λογισμικό</option>
+              <option value={'7'}>Χωρίς δεύτερη ειδίκευση</option>
             </>
-            : specialization === 2
+            : specialization === '2'
               ? <>
-                <option value={1}>S1: Θεμελιώσεις της Πληροφορικής</option>
-                <option value={3}>S3: Λογισμικό</option>
-                <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+                <option value={'1'}>S1: Θεμελιώσεις της Πληροφορικής</option>
+                <option value={'3'}>S3: Λογισμικό</option>
+                <option value={'7'}>Χωρίς δεύτερη ειδίκευση</option>
               </>
-              : <>
-                <option value={1}>S1: Θεμελιώσεις της Πληροφορικής</option>
-                <option value={2}>S2: Διαχείριση δεδομένων και γνώσης</option>
-                <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
-              </>
+              : specialization === '3'
+                ? <>
+                  <option value={'1'}>S1: Θεμελιώσεις της Πληροφορικής</option>
+                  <option value={'2'}>S2: Διαχείριση δεδομένων και γνώσης</option>
+                  <option value={'7'}>Χωρίς δεύτερη ειδίκευση</option>
+                </>
+                : <>
+                  <option value={'7'}>Χωρίς δεύτερη ειδίκευση</option>
+                </>
           )
-          : (specialization === 4
+          : (specialization === '4'
             ? <>
-              <option value={5}>S5: Επικοινωνίες και Δικτύωση</option>
-              <option value={6}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
-              <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+              <option value={'5'}>S5: Επικοινωνίες και Δικτύωση</option>
+              <option value={'6'}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
+              <option value={'7'}>Χωρίς δεύτερη ειδίκευση</option>
             </>
-            : specialization === 5
+            : specialization === '5'
               ? <>
-                <option value={4}>S4: Υλικό και Αρχιτεκτονική</option>
-                <option value={6}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
-                <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
+                <option value={'4'}>S4: Υλικό και Αρχιτεκτονική</option>
+                <option value={'6'}>S6: Επεξεργασία Σήματος και Πληροφορίας</option>
+                <option value={'7'}>Χωρίς δεύτερη ειδίκευση</option>
               </>
-              : <>
-                <option value={4}>S4: Υλικό και Αρχιτεκτονική</option>
-                <option value={5}>S5: Επικοινωνίες και Δικτύωση</option>
-                <option value={7}>Χωρίς δεύτερη ειδίκευση</option>
-              </>
+              : specialization === '6'
+                ? <>
+                  <option value={'4'}>S4: Υλικό και Αρχιτεκτονική</option>
+                  <option value={'5'}>S5: Επικοινωνίες και Δικτύωση</option>
+                  <option value={'7'}>Χωρίς δεύτερη ειδίκευση</option>
+                </>
+                : <>
+                  <option value={'7'}>Χωρίς δεύτερη ειδίκευση</option>
+                </>
           )
         }
       </select>

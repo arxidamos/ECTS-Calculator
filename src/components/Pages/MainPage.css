@@ -152,25 +152,28 @@ td > input:focus {
 }
 
 .highlighted-row-track .course-input, .highlighted-row-track {
-  background-color: #60BBD0;
+  background-color: #FF793B;
 }
 
 .highlighted-row-track:hover td, .highlighted-row-track:hover .course-input {
-  background-color: #30C5FF;
+  background-color: #FFC9B1;
 }
 
 .highlighted-row-spec .course-input, .highlighted-row-spec,
+.highlighted-row-extra-spec .course-input, .highlighted-row-extra-spec,
+.highlighted-row-both-specs .course-input, .highlighted-row-both-specs,
 .highlighted-row-project .course-input, .highlighted-row-project {
-  background-color: #5DE23C;
+  background-color: #FBF719;
 }
 
 .highlighted-row-spec:hover td, .highlighted-row-spec:hover .course-input,
+.highlighted-row-extra-spec:hover td, .highlighted-row-extra-spec:hover .course-input,
+.highlighted-row-both-specs:hover td, .highlighted-row-both-specs:hover .course-input,
 .highlighted-row-project:hover td, .highlighted-row-project:hover .course-input {
-  background-color: #49fb35;
+  background-color: #FDFCA3;
 }
 
 
-.highlighted-row-project
 
 .info-tip {
   position: relative;

@@ -73,7 +73,6 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
     extraSpecializationCourses = courses.filter(course =>
       course.neededFor.includes(`s${extraSpecialization}`) && !course.neededFor.includes(`s${specialization}`)
     );
-    console.log(specializationCourses, extraSpecializationCourses)
   }
   return {
     trackCompTotal: trackCourses,
@@ -126,9 +125,9 @@ const MainPage = () => {
       { course: "Ψηφιακή Επεξεργασία Σήματος", ects: 6, grade: "", type: "track-compulsory", semester:"5ο", neededFor: "s6" },
       { course: "Διαχείριση Δικτύων", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "s5" },
       { course: "Ηλεκτρονική", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "s4" },
-      { course: "Θεωρία Πληροφορίας και Κωδίκων", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "S6" },
+      { course: "Θεωρία Πληροφορίας και Κωδίκων", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "s6" },
       { course: "Θεωρία Υπολογισμού", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "s2" },
-      { course: "Μαθηματική Πληροφορικής", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "s1" },
+      { course: "Μαθηματικά Πληροφορικής", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "s1" },
       { course: "Μεταγλωττιστές", ects: 6, grade: "", type: "track-compulsory", semester:"6ο", neededFor: "s3", specialization: "s4" },
 
       // Projects
@@ -216,6 +215,12 @@ const MainPage = () => {
     : JSON.parse(localStorage.getItem('courses'))
   );
 
+  const [specAndExtraSpecTotal, setSpecAndExtraSpecTotal] = useState(
+    !localStorage.getItem('specAndExtraSpecTotal')
+    ? 0
+    : JSON.parse(localStorage.getItem('specAndExtraSpecTotal'))
+  );
+
   const [searchTerm, setSearchTerm] = useState("");
   
   const [track, setTrack] = useState(
@@ -226,13 +231,13 @@ const MainPage = () => {
 
   const [specialization, setSpecialization] = useState(
     !localStorage.getItem('specialization')
-    ? 7
+    ? '7'
     : JSON.parse(localStorage.getItem('specialization'))
   );
   
   const [extraSpecialization, setExtraSpecialization] = useState(
     !localStorage.getItem('extraSpecialization')
-    ? 7
+    ? '7'
     : JSON.parse(localStorage.getItem('extraSpecialization'))
   );
 
@@ -290,6 +295,11 @@ const MainPage = () => {
       setTrack(JSON.parse(storedTrack));
     }
 
+    const storedSpecAndExtraSpecTotal  = localStorage.getItem('specAndExtraSpecTotal');
+    if (specAndExtraSpecTotal) {
+      setSpecAndExtraSpecTotal(JSON.parse(storedSpecAndExtraSpecTotal));
+    }
+
     const storedSpecialization = localStorage.getItem('specialization');
     if (storedSpecialization) {
       setSpecialization(JSON.parse(storedSpecialization));
@@ -316,6 +326,11 @@ const MainPage = () => {
     localStorage.setItem('courses', JSON.stringify(courses));
   }, [courses]);
 
+  // Each time specAndExtraSpecTotal is changed, update localStorage
+  useEffect(() => {
+    localStorage.setItem('specAndExtraSpecTotal', JSON.stringify(specAndExtraSpecTotal));
+  }, [specAndExtraSpecTotal]);
+
   // Each time track is changed, update localStorage
   useEffect(() => {
     localStorage.setItem('track', JSON.stringify(track));
@@ -341,12 +356,17 @@ const MainPage = () => {
     localStorage.setItem('average', JSON.stringify(ectsAverage));
   }, [ectsAverage]);
 
+  useEffect(() => {
+    setSpecAndExtraSpecTotal(findCoursesPassed().specAndExtraSpecTotal);
+  }, [specialization, extraSpecialization]);
+
   // Calculate average grade
   const findAverage = () => {
     const filteredCourses = courses.filter(course => course.dontCalc !== true)
     const { sum, totalEcts } = calculateAverageAux(filteredCourses);
+    const average = (sum / totalEcts) ? (sum / totalEcts).toFixed(2) : '0.00';
     return {
-      average: (sum / totalEcts).toFixed(2) || 0,
+      average: average,
       totalEcts
     };
   };
@@ -381,39 +401,60 @@ const MainPage = () => {
       thesisPassed: thesisPassed.length,
       trackCompSpecTotal: 4,
       trackCompSpecPassed: (trackCompPassed.length + specializationPassed.length + extraSpecializationPassed.length),
+      specAndExtraSpecTotal: (trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length)
     };
   };
 
-  // Set tr class based on Track and Specialization
+  // Set <tr> class based on Track, Specialization, and Extra Specialization
   const getClassName = (course) => {
     let className = "course-row";
     if (highlight) {
       if (track === "A") {
         if (course.neededFor) {
-          const isNeededForSpecialization = course.neededFor.includes(`s${specialization}`);
+          const isNeededForSpec = course.neededFor.includes(`s${specialization}`) && !course.neededFor.includes(`${extraSpecialization}`)
+          const isNeededForExtraSpec = !course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
+          const isNeededForBothSpecs = course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
           const isAvailableForTrackA = course.neededFor.split(";").some(s => ["s1", "s2", "s3"].includes(s));
-          // Course is available for Track "A" but not needed for current Specialization
-          if (isAvailableForTrackA && !isNeededForSpecialization) {
+          // Course is available for Track "A" but not needed for current Specializations
+          if (isAvailableForTrackA && !isNeededForSpec && !isNeededForExtraSpec && !isNeededForBothSpecs) {
             className = "course-row highlighted-row-track";
           }
           // Course is needed for current Specialization of Track "A"
-          else if (isAvailableForTrackA && isNeededForSpecialization) {
+          else if (isAvailableForTrackA && isNeededForSpec) {
             className = "course-row highlighted-row-spec";
+          }
+          // Course is needed for current Extra Specialization of Track "A"
+          else if (isAvailableForTrackA && isNeededForExtraSpec) {
+            className = "course-row highlighted-row-extra-spec"
+          }
+          // Course is needed for both current Specializations of Track "A"
+          else if (isAvailableForTrackA && isNeededForBothSpecs) {
+            className = "course-row highlighted-row-both-specs"
           }
         } else if (course.projectFor === "A") {
           className = "course-row highlighted-row-project";
         }
       } else if (track === "B") {
         if (course.neededFor) {
-          const isNeededForSpecialization = course.neededFor.includes(`s${specialization}`);
-          const isNeededForTrackB = course.neededFor.split(";").some(s => ["s4", "s5", "s6"].includes(s));
+          const isNeededForSpec = course.neededFor.includes(`s${specialization}`) && !course.neededFor.includes(`${extraSpecialization}`)
+          const isNeededForExtraSpec = !course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
+          const isNeededForBothSpecs = course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
+          const isAvailableForTrackB = course.neededFor.split(";").some(s => ["s4", "s5", "s6"].includes(s));
           // Course is available for Track "B" but not needed for current Specialization
-          if (isNeededForTrackB && !isNeededForSpecialization) {
+          if (isAvailableForTrackB && !isNeededForSpec && !isNeededForExtraSpec && !isNeededForBothSpecs) {
             className = "course-row highlighted-row-track";
           }
           // Course is needed for current Specialization of Track "B"
-          else if (isNeededForTrackB && isNeededForSpecialization) {
+          else if (isAvailableForTrackB && isNeededForSpec) {
             className = "course-row highlighted-row-spec";
+          }
+          // Course is needed for current Extra Specialization of Track "B"
+          else if (isAvailableForTrackB && isNeededForExtraSpec) {
+            className = "course-row highlighted-row-extra-spec"
+          }
+          // Course is needed for both current Specializations of Track "B"
+          else if (isAvailableForTrackB && isNeededForBothSpecs) {
+            className = "course-row highlighted-row-both-specs"
           }
         } else if (course.projectFor === "B") {
           className = "course-row highlighted-row-project";
@@ -476,12 +517,20 @@ const MainPage = () => {
 
                       <td data-label="" className="course-cell" title={course.course}>
                         {getClassName(course).includes("highlighted-row-spec")
-                          ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ"/>
+                          ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{specialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
                           : getClassName(course).includes("highlighted-row-track")
-                            ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ - ΧΡΕΙΑΖΟΝΤΑΙ 2"/>
+                            ? specAndExtraSpecTotal === '2'
+                              ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
+                              : specAndExtraSpecTotal === '3'
+                                ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΕΤΑΙ 1</span>} />
+                                : <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΔΕΝ ΧΡΕΙΑΖΕΤΑΙ</span>} />
                             : getClassName(course).includes("highlighted-row-project")
-                              ? <InfoTip className="info-tip" text="ΥΠΟΧΡΕΩΤΙΚΟ PROJECT - ΧΡΕΙΑΖΕΤΑΙ 1"/>
-                              : null
+                              ? <InfoTip className="info-tip" text={<span>PROJECT ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΕΤΑΙ 1</span>} />
+                              : getClassName(course).includes("highlighted-row-both-specs")
+                                ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖETAI ΑΛΛΟ 1 ΓΙΑ ΚΑΘΕΜΙΑ</span>} />
+                                : getClassName(course).includes("highlighted-row-extra-spec")
+                                  ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
+                                  : null
                         }
                         <div className="course-text-container">
                           <div className="img-course">
@@ -539,3 +588,5 @@ const MainPage = () => {
 }
 
 export default MainPage;
+
+// TO DO: ΝΑ ελέγχει αν είναι τα πράσινα 4,3 ή 2 για τα track comp courses
