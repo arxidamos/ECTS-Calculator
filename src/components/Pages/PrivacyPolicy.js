@@ -5,7 +5,7 @@ import './PrivacyPolicy.css'
 const PrivacyPolicy = () => {
   return (
     <div className="privacy-policy">
-      <h2>Privacy Policy</h2>
+      <h2>Πολιτική Απορρήτου</h2>
       <p>
         Το κείμενο αυτό ορίζει τα δεδομένα που συλλέγουμε, τον τρόπο που χρησιμοποιούνται και τα μέτρα που λαμβάνονται για να διασφαλιστεί η προστασία τους. 
       </p>
@@ -26,7 +26,7 @@ const PrivacyPolicy = () => {
         Το ECTS Calculator τηρεί πλήρως τον Γενικό Κανονισμό για την Προστασία Δεδομένων (GDPR) της Ευρωπαϊκής Ένωσης (ΕΕ). Οι πολίτες της ΕΕ έχουν το δικαίωμα της πρόσβασης στα προσωπικά τους δεδομένα, της αίτησης για διόρθωση ή διαγραφή τους και της άρνησης στη χρήση τους. Αν επιθυμείτε να ασκήσετε κάποιο από αυτά τα δικαιώματα, μπορείτε να <Link to="/contact"> επικοινωνήσετε μαζί μας</Link>.
       </p>
       <p>
-        Το παρόν κείμενο ανανεώθηκε στις 31 Ιαν 2023.
+        Το κείμενο ανανεώθηκε στις 31 Ιαν 2023.
       </p>
 
         {/* At [Your Website Name], we are committed to protecting the privacy and security of our users. This Privacy Policy sets out the type of information we collect, how we use it, and the steps we take to ensure that your data is protected.

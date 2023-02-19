@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
 import MainPage from './components/Pages/MainPage';
 import About from './components/Pages/About';
 import Contact from './components/Pages/Contact';
 import Navigation from './components/Navigation/Navigation';
 import Footer from './components/Footer/Footer';
 import PrivacyPolicy from './components/Pages/PrivacyPolicy';
-
-import './App.css';
+import TermsOfService from './components/Pages/TermsOfService';
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
           <Route path="/about" element={ <About/> } />
           <Route path="/contact" element={ <Contact/> } />
           <Route path="/privacy-policy" element={ <PrivacyPolicy /> } />
+          <Route path="/terms-of-service" element={ <TermsOfService /> } />
         </Routes>
       </div>
       <Footer />

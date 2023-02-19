@@ -7,10 +7,10 @@ const Footer = () => {
     <div className="footer">
       <p>© Archidamos {new Date().getFullYear()}</p>
       <p>
-        <Link to="/privacy-policy">Privacy Policy</Link>
+        <Link to="/privacy-policy">Πολιτική Απορρήτου</Link>
       </p>
       <p>
-        <Link to="/privacy-policy">Terms of Service</Link>
+        <Link to="/terms-of-service">Όροι Χρήσης</Link>
       </p>
     </div>
 
