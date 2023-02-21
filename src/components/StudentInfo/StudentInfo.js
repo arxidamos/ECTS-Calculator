@@ -147,27 +147,27 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
           Υποχρεωτικά
         </div>
         <div className="grid-item grid-right">
-          {compPassed} από {compTotal} (γαλάζιο χρώμα)
+          {compPassed} από {compTotal}
         </div>
         <div className="grid-item">
           Γενικής παιδείας
         </div>
         <div className="info-container">
           <div className="grid-item grid-right">
-            {genEduPassed} από {genEduTotal} (γαλάζιο χρώμα)
+            {genEduPassed} από {genEduTotal}
           </div>
         </div>
         <div className="grid-item">
           Υποχρεωτικά Κατεύθυνσης
         </div>
         <div className="grid-item grid-right">
-          {trackCompSpecPassed} από {trackCompSpecTotal} (πράσινο χρώμα)
+          {trackCompSpecPassed} από {trackCompSpecTotal}
         </div>
         <div className="grid-item">
           Project
         </div>
         <div className="grid-item grid-right">
-          1 (γαλάζιο χρώμα)
+          1
         </div>
         <div className="grid-item">
           Πρακτική / Πτυχιακή

@@ -74,6 +74,13 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
       course.neededFor.includes(`s${extraSpecialization}`) && !course.neededFor.includes(`s${specialization}`)
     );
   }
+
+  // If 4 different courses are needed for spec1, spec2,
+  // no track compulsory can be taken by the student
+  if ((specializationCourses.length + extraSpecializationCourses.length) === 4) {
+    trackCourses = [];
+  }
+  console.log(specializationCourses, extraSpecializationCourses)
   return {
     trackCompTotal: trackCourses,
     specializationTotal: specializationCourses,
@@ -392,6 +399,8 @@ const MainPage = () => {
     const specializationPassed = trackAndSpecTotal.specializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
     const extraSpecializationPassed = trackAndSpecTotal.extraSpecializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
 
+    console.log(trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length)
+
     return {
       compTotal: compTotal.length,
       compPassed: compPassed.length,
@@ -519,9 +528,9 @@ const MainPage = () => {
                         {getClassName(course).includes("highlighted-row-spec")
                           ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{specialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
                           : getClassName(course).includes("highlighted-row-track")
-                            ? specAndExtraSpecTotal === '2'
+                            ? specAndExtraSpecTotal === 2
                               ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
-                              : specAndExtraSpecTotal === '3'
+                              : specAndExtraSpecTotal === 3
                                 ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΕΤΑΙ 1</span>} />
                                 : <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΔΕΝ ΧΡΕΙΑΖΕΤΑΙ</span>} />
                             : getClassName(course).includes("highlighted-row-project")
