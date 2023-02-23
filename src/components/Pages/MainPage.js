@@ -392,6 +392,12 @@ const MainPage = () => {
     const thesisTotal = courses.filter(course => course.type === "thesis");
     const thesisPassed = thesisTotal.filter(course => course.grade >= 5 && course.grade <= 10);
 
+    // Project
+    const projectCourses = courses.filter(course => 
+      course.projectFor === track
+    );
+    const projectPassed = projectCourses.filter(course => course.grade >= 5 && course.grade <= 10);
+
     // Track compulsory (calculate separately those needed for spec and those available for track)
     const trackCompCoursesAll = courses.filter(course => course.type === "track-compulsory");
     const trackAndSpecTotal = filterTrackCompCourses(trackCompCoursesAll, track, specialization, extraSpecialization);
@@ -419,7 +425,8 @@ const MainPage = () => {
       thesisPassed: thesisPassed.length,
       trackCompSpecTotal: 4,
       trackCompSpecPassed: (trackCompPassedToCount + specializationPassed.length + extraSpecializationPassed.length),
-      specAndExtraSpecTotal: (trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length)
+      specAndExtraSpecTotal: (trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length),
+      projectPassed: Math.min(1, projectPassed.length),
     };
   };
 

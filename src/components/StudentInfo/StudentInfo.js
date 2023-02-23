@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extraSpecialization, setExtraSpecialization, highlight, setHighlight, findAverage, findCoursesPassed }) => {
   const {average, totalEcts} = findAverage();
-  const {compTotal, compPassed, genEduTotal, genEduPassed, thesisTotal, thesisPassed, trackCompSpecTotal, trackCompSpecPassed} = findCoursesPassed();
+  const {compTotal, compPassed, genEduTotal, genEduPassed, thesisTotal, thesisPassed, trackCompSpecTotal, trackCompSpecPassed, projectPassed} = findCoursesPassed();
 
   const [isChecked, setIsChecked] = useState(
     !localStorage.getItem('isChecked')
@@ -167,7 +167,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
           Project
         </div>
         <div className="grid-item grid-right">
-          1
+          {projectPassed} από 1
         </div>
         <div className="grid-item">
           Πρακτική / Πτυχιακή

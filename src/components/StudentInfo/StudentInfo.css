@@ -58,7 +58,6 @@ select.grid-item, .switch {
   transition: 0s visibility ease-in-out, opacity 0s ease-in-out;
 }
 
-
 .switch {
   position: relative;
   display: inline-block;
@@ -120,6 +119,10 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.grid-right {
+  text-transform: lowercase;
 }
 
 @media screen and (max-width: 480px) {
