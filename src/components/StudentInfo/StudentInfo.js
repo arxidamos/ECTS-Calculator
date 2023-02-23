@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 
 const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extraSpecialization, setExtraSpecialization, highlight, setHighlight, findAverage, findCoursesPassed }) => {
   const {average, totalEcts} = findAverage();
-  const {compTotal, compPassed, genEduTotal, genEduPassed, thesisTotal, thesisPassed, trackCompSpecTotal, trackCompSpecPassed, projectPassed} = findCoursesPassed();
+  
+  const {compTotal, compPassed, genEduTotal, genEduPassed, thesisTotal, thesisPassed, trackCompSpecTotal, trackCompSpecPassed, electiveTotal, electivePassed, projectPassed} = findCoursesPassed();
 
   const [isChecked, setIsChecked] = useState(
     !localStorage.getItem('isChecked')
@@ -14,6 +15,9 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
 
   const handleTrackChange = event => {
     setTrack(event.target.value);
+    // Reset spec and extra spec
+    setSpecialization('7');
+    setExtraSpecialization('7');
   };
 
   const handleSpecializationChange = event => {
@@ -41,6 +45,13 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
     localStorage.setItem('isChecked', JSON.stringify(isChecked));
   }, [isChecked]);
 
+  useEffect( () => {
+    if (specialization === extraSpecialization) {
+      setExtraSpecialization('7');
+    }
+    console.log(`spec=${specialization}, extra=${extraSpecialization}`)
+
+  }, [track, specialization, extraSpecialization])
   return (
     <form className="student-info-form">
       <label className="grid-item" htmlFor="track">Κατεύθυνση</label>
@@ -179,7 +190,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
           Προαιρετικά ειδικότητας
         </div>
         <div className="grid-item grid-right">
-          4 από 8 (κίτρινο χρώμα)
+          {electivePassed} από {electiveTotal}
         </div>
       </div>
     </form>

@@ -66,6 +66,8 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
   }
 
   if (specialization !== "7") {
+    // console.log(`program thinks specialization has been chosen`)
+    // console.log(specialization)
     specializationCourses = courses.filter(course =>
       course.neededFor.includes(`s${specialization}`)
     );
@@ -80,7 +82,7 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
   if ((specializationCourses.length + extraSpecializationCourses.length) === 4) {
     trackCourses = [];
   }
-  console.log(specializationCourses, extraSpecializationCourses)
+  // console.log(specializationCourses, extraSpecializationCourses)
   return {
     trackCompTotal: trackCourses,
     specializationTotal: specializationCourses,
@@ -365,7 +367,8 @@ const MainPage = () => {
 
   useEffect(() => {
     setSpecAndExtraSpecTotal(findCoursesPassed().specAndExtraSpecTotal);
-  }, [specialization, extraSpecialization]);
+    findCoursesPassed();
+  }, [track, specialization, extraSpecialization]);
 
   // Calculate average grade
   const findAverage = () => {
@@ -414,7 +417,10 @@ const MainPage = () => {
     const specializationPassed = trackAndSpecTotal.specializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
     const extraSpecializationPassed = trackAndSpecTotal.extraSpecializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
 
-    console.log(trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length)
+    // const electivePassed = trackAndSpecTotal.electiveTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+    // const electivePassedToCount = 
+
+    // console.log(trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length)
 
     return {
       compTotal: compTotal.length,
@@ -427,6 +433,8 @@ const MainPage = () => {
       trackCompSpecPassed: (trackCompPassedToCount + specializationPassed.length + extraSpecializationPassed.length),
       specAndExtraSpecTotal: (trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length),
       projectPassed: Math.min(1, projectPassed.length),
+      // electiveTotal: trackAndSpecTotal.electiveTotal.length,
+      // electivePassed: trackAndSpecTotal.electivePassed.length
     };
   };
 
@@ -544,11 +552,13 @@ const MainPage = () => {
                         {getClassName(course).includes("highlighted-row-spec")
                           ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{specialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
                           : getClassName(course).includes("highlighted-row-track")
-                            ? specAndExtraSpecTotal === 2
-                              ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
-                              : specAndExtraSpecTotal === 3
-                                ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΕΤΑΙ 1</span>} />
-                                : <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΔΕΝ ΧΡΕΙΑΖΕΤΑΙ</span>} />
+                            ? specAndExtraSpecTotal === 0
+                              ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
+                              : specAndExtraSpecTotal === 2
+                                ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
+                                : specAndExtraSpecTotal === 3
+                                  ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΕΤΑΙ 1</span>} />
+                                  : <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΔΕΝ ΧΡΕΙΑΖΕΤΑΙ</span>} />
                             : getClassName(course).includes("highlighted-row-project")
                               ? <InfoTip className="info-tip" text={<span>PROJECT ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΕΤΑΙ 1</span>} />
                               : getClassName(course).includes("highlighted-row-both-specs")
