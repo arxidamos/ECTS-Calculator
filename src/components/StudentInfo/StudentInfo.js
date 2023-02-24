@@ -142,52 +142,50 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
         <span className="slider round"></span>
       </label>
       <div className={isChecked ? "passedCoursesInfo " : "passedCoursesInfo no-display"}>
-        <div className="grid-item">
+        <div className="grid-item" title="ECTS">
           ECTS
         </div>
         <div className="grid-item grid-right">
           {totalEcts} / 240
         </div>
-        <div className="grid-item">
+        <div className="grid-item" title="Μέσος Όρος">
           Μέσος όρος
         </div>
         <div className="grid-item grid-right">
           {average}
         </div>
-        <div className="grid-item">
+        <div className="grid-item" title="Υποχρεωτικά">
           Υποχρεωτικά
         </div>
         <div className="grid-item grid-right">
           {compPassed} από {compTotal}
         </div>
-        <div className="grid-item">
+        <div className="grid-item" title="Γενικής Παιδείας">
           Γενικής παιδείας
         </div>
-        <div className="info-container">
-          <div className="grid-item grid-right">
-            {genEduPassed} από {genEduTotal}
-          </div>
+        <div className="grid-item grid-right">
+          {genEduPassed} από {genEduTotal}
         </div>
-        <div className="grid-item">
+        <div className="grid-item" title="Υποχρεωτικά Κατεύθυνσης">
           Υποχρεωτικά Κατεύθυνσης
         </div>
         <div className="grid-item grid-right">
           {trackCompSpecPassed} από {trackCompSpecTotal}
         </div>
-        <div className="grid-item">
+        <div className="grid-item" title="Project">
           Project
         </div>
         <div className="grid-item grid-right">
           {projectPassed} από 1
         </div>
-        <div className="grid-item">
+        <div className="grid-item" title="Πρακτική ή Πτυχιακή">
           Πρακτική / Πτυχιακή
         </div>
         <div className="grid-item grid-right">
           {thesisPassed} από {thesisTotal}
         </div>
-        <div className="grid-item">
-          Προαιρετικά ειδικότητας
+        <div className="grid-item" title="Προαιρετικά Ειδίκευσης">
+          Προαιρετικά ειδίκευσης
         </div>
         <div className="grid-item grid-right">
           {electivePassed} από {electiveTotal}

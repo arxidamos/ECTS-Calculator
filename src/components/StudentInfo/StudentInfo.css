@@ -138,24 +138,18 @@ input:checked + .slider:before {
     padding-top: 1em;
   }
 
-
   .switch {
     position: relative;
     display: inline-block;
     width: 72px;
     height: 32px;
     align-self: flex-start;
-    /* justify-self: flex-start; */
     margin-top: 0em;
-    /* margin-left: 1em; */
   }
 
   .grid-item {
     display: flex;
-    /* align-items: center; */
-    /* justify-content: center; */
     margin-top: 0em;
-    /* margin-left: 0em; */
   }
 
   select.grid-item, .switch {
@@ -170,5 +164,20 @@ input:checked + .slider:before {
     margin-left: 1em;
     margin-bottom: 1em;
   }
+}
 
+/* Two-columns display for passed courses info in wider screens */
+@media screen and (min-width: 540px) {
+  .passedCoursesInfo {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .passedCoursesInfo > .grid-item {
+    text-align: left;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
