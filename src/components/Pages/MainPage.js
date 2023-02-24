@@ -464,10 +464,12 @@ const MainPage = () => {
           else if (isAvailableForTrackA && isNeededForBothSpecs) {
             className = "course-row highlighted-row-both-specs"
           }
-        } else if (course.projectFor === "A") {
+        }
+        else if (course.projectFor === "A") {
           className = "course-row highlighted-row-project";
         }
-      } else if (track === "B") {
+      }
+      else if (track === "B") {
         if (course.neededFor) {
           const isNeededForSpec = course.neededFor.includes(`s${specialization}`) && !course.neededFor.includes(`${extraSpecialization}`)
           const isNeededForExtraSpec = !course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
@@ -493,11 +495,54 @@ const MainPage = () => {
           className = "course-row highlighted-row-project";
         }
       }
+
+      if (course.specialization) {
+        const isNeededForSpec = course.specialization.includes(`s${specialization}`) && !course.specialization.includes(`${extraSpecialization}`)
+        const isNeededForExtraSpec = !course.specialization.includes(`s${specialization}`) && course.specialization.includes(`${extraSpecialization}`);
+        const isNeededForBothSpecs = course.specialization.includes(`s${specialization}`) && course.specialization.includes(`${extraSpecialization}`);
+        const isAvailableForTrackA = course.specialization.split(";").some(s => ["s1", "s2", "s3"].includes(s));
+        const isAvailableForTrackB = course.specialization.split(";").some(s => ["s4", "s5", "s6"].includes(s));
+
+        if (track === "A") {
+          // Course is available for Track "A" but not needed for current Specializations
+          if (isAvailableForTrackA && !isNeededForSpec && !isNeededForExtraSpec && !isNeededForBothSpecs) {
+            className = "course-row highlighted-row-elective-track";
+          }
+          // Course is needed for current Specialization of Track "A"
+          else if (isAvailableForTrackA && isNeededForSpec) {
+            className = "course-row highlighted-row-elective-spec";
+          }
+          // Course is needed for current Extra Specialization of Track "A"
+          else if (isAvailableForTrackA && isNeededForExtraSpec) {
+            className = "course-row highlighted-row-elective-extra-spec"
+          }
+          // Course is needed for both current Specializations of Track "A"
+          else if (isAvailableForTrackA && isNeededForBothSpecs) {
+            className = "course-row highlighted-row-elective-both-specs"
+          }
+        }
+        else if (track === "B") {
+          // Course is available for Track "B" but not needed for current Specializations
+          if (isAvailableForTrackB && !isNeededForSpec && !isNeededForExtraSpec && !isNeededForBothSpecs) {
+            className = "course-row highlighted-row-track";
+          }
+          // Course is needed for current Specialization of Track "B"
+          else if (isAvailableForTrackB && isNeededForSpec) {
+            className = "course-row highlighted-row-spec";
+          }
+          // Course is needed for current Extra Specialization of Track "B"
+          else if (isAvailableForTrackB && isNeededForExtraSpec) {
+            className = "course-row highlighted-row-extra-spec"
+          }
+          // Course is needed for both current Specializations of Track "B"
+          else if (isAvailableForTrackB && isNeededForBothSpecs) {
+            className = "course-row highlighted-row-both-specs"
+          }
+        }
+      }
     }
     return className;
   };
-
-  
 
   return (
     <>
@@ -564,8 +609,18 @@ const MainPage = () => {
                               : getClassName(course).includes("highlighted-row-both-specs")
                                 ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖETAI ΑΛΛΟ 1 ΓΙΑ ΚΑΘΕΜΙΑ</span>} />
                                 : getClassName(course).includes("highlighted-row-extra-spec")
-                                  ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
-                                  : null
+                                  ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
+                                  : getClassName(course).includes("highlighted-row-elective-track")
+                                    ? specialization === '7'
+                                      ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
+                                      : <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΔΕΝ ΧΡΕΙΑΖΕΤΑΙ</span>} />
+                                    : getClassName(course).includes("highlighted-row-elective-spec")
+                                      ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{specialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
+                                      : getClassName(course).includes("highlighted-row-elective-extra-spec")
+                                        ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
+                                        : getClassName(course).includes("highlighted-row-elective-both-specs")
+                                          ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΟΤΗΤΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖONTAI ΑΛΛA 3 ΓΙΑ ΚΑΘΕΜΙΑ</span>} />
+                                          : null
                         }
                         <div className="course-text-container">
                           <div className="img-course">

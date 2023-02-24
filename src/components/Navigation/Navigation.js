@@ -48,7 +48,7 @@ const Navigation = () => {
                 className="nav-links"
                 onClick={handleClick}
               >
-                Home
+                Αρχική
               </NavLink>
             </li>
             <li className="nav-item">
@@ -66,7 +66,7 @@ const Navigation = () => {
                 className="nav-links"
                 onClick={handleClick}
               >
-                Contact Us
+                Επικοινωνία
               </NavLink>
             </li>
           </ul>

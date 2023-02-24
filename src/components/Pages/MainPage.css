@@ -150,15 +150,21 @@ td > input:focus {
     text-align: center;
   }
 }
-
+.highlighted-row-elective-track .course-input, .highlighted-row-elective-track,
 .highlighted-row-track .course-input, .highlighted-row-track {
   background-color: #FF793B;
 }
 
+.highlighted-row-elective-track:hover td, .highlighted-row-elective-track:hover .course-input,
 .highlighted-row-track:hover td, .highlighted-row-track:hover .course-input {
   background-color: #FFC9B1;
 }
 
+
+
+.highlighted-row-elective-spec .course-input, .highlighted-row-elective-spec,
+.highlighted-row-elective-both-specs .course-input, .highlighted-row-elective-both-specs,
+.highlighted-row-elective-extra-spec .course-input, .highlighted-row-elective-extra-spec,
 .highlighted-row-spec .course-input, .highlighted-row-spec,
 .highlighted-row-extra-spec .course-input, .highlighted-row-extra-spec,
 .highlighted-row-both-specs .course-input, .highlighted-row-both-specs,
@@ -166,14 +172,15 @@ td > input:focus {
   background-color: #FBF719;
 }
 
+.highlighted-row-elective-spec:hover td, .highlighted-row-elective-spec:hover .course-input,
+.highlighted-row-elective-extra-spec:hover td, .highlighted-row-elective-extra-spec:hover .course-input,
+.highlighted-row-elective-both-specs:hover td, .highlighted-row-elective-both-specs:hover .course-input,
 .highlighted-row-spec:hover td, .highlighted-row-spec:hover .course-input,
 .highlighted-row-extra-spec:hover td, .highlighted-row-extra-spec:hover .course-input,
 .highlighted-row-both-specs:hover td, .highlighted-row-both-specs:hover .course-input,
 .highlighted-row-project:hover td, .highlighted-row-project:hover .course-input {
   background-color: #FDFCA3;
 }
-
-
 
 .info-tip {
   position: relative;
