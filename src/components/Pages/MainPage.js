@@ -45,7 +45,7 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
   let specializationCourses = [];
   let extraSpecializationCourses = [];
 
-  // Add courses availbale for this Track (bar those necessary for the Specialization)
+  // Add courses available for this Track (bar those necessary for the Specialization)
   if (track === "A") {
     trackCourses = courses.filter(course =>
       (course.neededFor.includes("s1") || course.neededFor.includes("s2") || course.neededFor.includes("s3"))
@@ -89,7 +89,89 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
     extraSpecializationTotal : extraSpecializationCourses
   }
 };
-  
+ 
+const getNumberOfPassedElective = (courses, track, specialization, extraSpecialization) => {
+  let electiveCourses = [];
+  let electiveCoursesPassed= [];
+  let specPassed = [];
+  let extraSpecPassed = [];
+  let bothSpecsPassed = [];
+  let specDiff = 0;
+  let extraSpecDiff = 0;
+  let totalPassedLength = 0;
+
+  // Add courses available as 'basic' for this Track's Specializations
+  if (track === "A") {
+    electiveCourses = courses.filter(course =>
+      course.specialization.includes("s1") || course.specialization.includes("s2") || course.specialization.includes("s3")
+    );
+  }
+  else if (track === "B") {
+    electiveCourses = courses.filter(course =>
+      course.specialization.includes("s4") || course.specialization.includes("s5") || course.specialization.includes("s6")
+    );
+  }
+
+  electiveCoursesPassed= electiveCourses.filter(course => course.grade >= 5 && course.grade <= 10);
+
+  // No Specs, just count whatever 4 basics of this Track
+  if (specialization === '7') {
+    return electiveCourses.length;
+  }
+  // Chosen Spec, not Extra Spec, count 4 basics of this Spec
+  else if (extraSpecialization === '7') {
+    return (electiveCoursesPassed.filter(course => 
+      course.specialization.includes(`s${specialization}`)
+    )).length;
+  }
+  // Chosen Spec and Extra Spec
+  else {
+    specPassed = electiveCoursesPassed.filter(course => (
+      course.specialization.includes(`s${specialization}`)
+      &&
+      !course.specialization.includes(`s${extraSpecialization}`)
+      )
+    )
+
+    extraSpecPassed = electiveCoursesPassed.filter(course => (
+      course.specialization.includes(`s${extraSpecialization}`)
+      &&
+      !course.specialization.includes(`s${specialization}`)
+      )
+    )
+
+    bothSpecsPassed = electiveCoursesPassed.filter(course => (
+      course.specialization.includes(`s${specialization}`)
+      &&
+      course.specialization.includes(`s${extraSpecialization}`)
+      )
+    )
+ 
+    if (specPassed.length >= 4) {
+      totalPassedLength += 4;
+    }
+    else if (specPassed.length < 4) {
+      totalPassedLength += specPassed.length;
+      specDiff = 4 - specPassed.length;
+    }
+
+    if (extraSpecPassed.length >= 4) {
+      totalPassedLength += 4;
+    }
+    else if (extraSpecPassed.length < 4) {
+      totalPassedLength += extraSpecPassed.length;
+      extraSpecDiff = 4 - extraSpecPassed.length;
+    }
+
+    if (totalPassedLength >= 8) {
+      return 8;
+    }
+    else {
+      return Math.min( totalPassedLength + bothSpecsPassed.length, 8)
+    }
+  }
+};
+
 const InfoTip = ({ text }) => (
   <span className="info-tip-span">
     &#42; {text}
@@ -413,14 +495,19 @@ const MainPage = () => {
         : specAndExtraSpecTotal === 3
           ? Math.min(1, trackCompPassed.length) // 2 specs selected with 1 common course, up to 1 comp can count
           : 0 // 2 specs selected without common courses, NO comp can count
-
+    ;
     const specializationPassed = trackAndSpecTotal.specializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
     const extraSpecializationPassed = trackAndSpecTotal.extraSpecializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
 
-    // const electivePassed = trackAndSpecTotal.electiveTotal.filter(course => course.grade >= 5 && course.grade <= 10);
-    // const electivePassedToCount = 
+    const electiveAll = courses.filter(course => course.specialization);
+    const electiveTotalNumber = extraSpecialization === '7'
+      // Only Track or only Track and Spec chosen, no Extra Spec, 4 elective needed
+      ? 4
+      // Both Spec chosen and Extra Spec chosen, 4 elective needed for each
+      : 8
+    ;
 
-    // console.log(trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length)
+    const electivePassedNumber = getNumberOfPassedElective(electiveAll, track, specialization, extraSpecialization);
 
     return {
       compTotal: compTotal.length,
@@ -433,8 +520,8 @@ const MainPage = () => {
       trackCompSpecPassed: (trackCompPassedToCount + specializationPassed.length + extraSpecializationPassed.length),
       specAndExtraSpecTotal: (trackAndSpecTotal.specializationTotal.length + trackAndSpecTotal.extraSpecializationTotal.length),
       projectPassed: Math.min(1, projectPassed.length),
-      // electiveTotal: trackAndSpecTotal.electiveTotal.length,
-      // electivePassed: trackAndSpecTotal.electivePassed.length
+      electiveTotal: electiveTotalNumber,
+      electivePassed: electivePassedNumber
     };
   };
 
@@ -524,19 +611,19 @@ const MainPage = () => {
         else if (track === "B") {
           // Course is available for Track "B" but not needed for current Specializations
           if (isAvailableForTrackB && !isNeededForSpec && !isNeededForExtraSpec && !isNeededForBothSpecs) {
-            className = "course-row highlighted-row-track";
+            className = "course-row highlighted-row-elective-track";
           }
           // Course is needed for current Specialization of Track "B"
           else if (isAvailableForTrackB && isNeededForSpec) {
-            className = "course-row highlighted-row-spec";
+            className = "course-row highlighted-row-elective-spec";
           }
           // Course is needed for current Extra Specialization of Track "B"
           else if (isAvailableForTrackB && isNeededForExtraSpec) {
-            className = "course-row highlighted-row-extra-spec"
+            className = "course-row highlighted-row-elective-extra-spec"
           }
           // Course is needed for both current Specializations of Track "B"
           else if (isAvailableForTrackB && isNeededForBothSpecs) {
-            className = "course-row highlighted-row-both-specs"
+            className = "course-row highlighted-row-elective-both-specs"
           }
         }
       }
@@ -545,7 +632,7 @@ const MainPage = () => {
   };
 
   return (
-    <>
+    <div className="main-wrapper">
       <StudentInfo track={track} setTrack={setTrack} specialization={specialization} setSpecialization={setSpecialization} extraSpecialization={extraSpecialization} setExtraSpecialization={setExtraSpecialization} highlight={highlight} setHighlight={setHighlight} findAverage={findAverage} findCoursesPassed={findCoursesPassed}/>
       <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <table className="responsive-table">
@@ -595,7 +682,7 @@ const MainPage = () => {
 
                       <td data-label="" className="course-cell" title={course.course}>
                         {getClassName(course).includes("highlighted-row-spec")
-                          ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{specialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
+                          ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΕΥΣΗΣ <strong style={{ fontSize: '10px' }}>S{specialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
                           : getClassName(course).includes("highlighted-row-track")
                             ? specAndExtraSpecTotal === 0
                               ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
@@ -607,19 +694,19 @@ const MainPage = () => {
                             : getClassName(course).includes("highlighted-row-project")
                               ? <InfoTip className="info-tip" text={<span>PROJECT ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΕΤΑΙ 1</span>} />
                               : getClassName(course).includes("highlighted-row-both-specs")
-                                ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖETAI ΑΛΛΟ 1 ΓΙΑ ΚΑΘΕΜΙΑ</span>} />
+                                ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΕΥΣΕΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖETAI ΑΛΛΟ 1 ΓΙΑ ΚΑΘΕΜΙΑ</span>} />
                                 : getClassName(course).includes("highlighted-row-extra-spec")
-                                  ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
+                                  ? <InfoTip className="info-tip" text={<span>ΥΠΟΧΡΕΩΤΙΚΟ ΕΙΔΙΚΕΥΣΗΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 2</span>} />
                                   : getClassName(course).includes("highlighted-row-elective-track")
                                     ? specialization === '7'
                                       ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
                                       : <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΚΑΤΕΥΘΥΝΣΗΣ <strong style={{ fontSize: '10px' }}>{track}</strong> - ΔΕΝ ΧΡΕΙΑΖΕΤΑΙ</span>} />
                                     : getClassName(course).includes("highlighted-row-elective-spec")
-                                      ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{specialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
+                                      ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΕΥΣΗΣ <strong style={{ fontSize: '10px' }}>S{specialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
                                       : getClassName(course).includes("highlighted-row-elective-extra-spec")
-                                        ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΟΤΗΤΑΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
+                                        ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΕΥΣΗΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
                                         : getClassName(course).includes("highlighted-row-elective-both-specs")
-                                          ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΟΤΗΤΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖONTAI ΑΛΛA 3 ΓΙΑ ΚΑΘΕΜΙΑ</span>} />
+                                          ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΕΥΣΕΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖΟΝΤΑΙ 4, ΜΕΤΡΑΕΙ ΜΟΝΟ ΓΙΑ ΤΗ ΜΙΑ</span>} />
                                           : null
                         }
                         <div className="course-text-container">
@@ -673,7 +760,7 @@ const MainPage = () => {
           ))}
       </table>
       <button onClick={addCourse}>Add Row</button>
-    </>
+    </div>
   );
 }
 

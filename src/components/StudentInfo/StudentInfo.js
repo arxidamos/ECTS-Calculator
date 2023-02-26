@@ -166,7 +166,7 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
         <div className="grid-item grid-right">
           {genEduPassed} από {genEduTotal}
         </div>
-        <div className="grid-item" title="Υποχρεωτικά Κατεύθυνσης">
+        <div className="grid-item" title="Κατ' επιλογή υποχρεωτικά μαθήματα για την κατοχύρωση των επιλεγμένων ειδικεύσεων και κατεύθυνσης">
           Υποχρεωτικά Κατεύθυνσης
         </div>
         <div className="grid-item grid-right">
@@ -184,8 +184,8 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
         <div className="grid-item grid-right">
           {thesisPassed} από {thesisTotal}
         </div>
-        <div className="grid-item" title="Προαιρετικά Ειδίκευσης">
-          Προαιρετικά ειδίκευσης
+        <div className="grid-item" title="Βασικά προαιρετικά μαθήματα για την κατοχύρωση των επιλεγμένων ειδικεύσεων ή, αν δεν επιθυμείτε ειδίκευση, της επιλεγμένης κατεύθυνσης">
+          Βασικά Ειδίκευσης
         </div>
         <div className="grid-item grid-right">
           {electivePassed} από {electiveTotal}
