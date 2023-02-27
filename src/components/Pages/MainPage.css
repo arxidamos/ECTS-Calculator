@@ -32,7 +32,6 @@ th.section-label {
   background-color: #195190;
   font-size: larger;
   padding: 1em 0em 1em 0em;
-
 }
 
 .course-cell {
@@ -83,6 +82,30 @@ td > input:focus {
   outline: none;
   border-bottom: 1px solid #195190;
 }
+
+th.section-label button {
+  color: #c7d3d4;
+  /* text-decoration: none; */
+  transition: all 0.5s ease;
+  background-color: #195190;
+  font-size: large;
+  font-weight: bold;
+  text-transform: capitalize;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  display: block;
+}
+
+th.section-label button:hover {
+  color: #fcf6f5;
+  transition: all 0.5s ease;
+}
+
+th.section-label button:active {
+  opacity: 0.5;
+}
+
 
 @media screen and (max-width: 480px) {
   .responsive-table th, td {
@@ -148,10 +171,15 @@ td > input:focus {
     border: none;
   }
 
+  .course-text-container {
+    max-width: 22em;
+  }
+  
   .text-course {
-    overflow: unset;
-    white-space: unset;
-    text-align: center;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 .highlighted-row-elective-track .course-input, .highlighted-row-elective-track,

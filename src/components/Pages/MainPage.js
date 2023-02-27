@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import './MainPage.css'
 import Search from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/Search/Search';
 import StudentInfo from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/StudentInfo/StudentInfo'
+import AddCourseModal from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/AddCourseModal/AddCourseModal'
 
 import checkmark from '/home/dimos/Desktop/ectsTool/ects-tool/src/checkmark.svg'
 import closemark from '/home/dimos/Desktop/ectsTool/ects-tool/src/empty.svg';
+
+const TRACK_A_SPECIALIZATIONS = ["s1", "s2", "s3"];
+const TRACK_B_SPECIALIZATIONS = ["s4", "s5", "s6"];
+const MAX_ELECTIVE_FOR_TRACK = 4;
+const MAX_ELECTIVE_FOR_TWO_SPECS = 8;
+const MIN_PASSABLE_GRADE = 5;
+const MAX_PASSABLE_GRADE = 10;
 
 const sanitize = (string) => {
   return string
@@ -31,10 +39,10 @@ const calculateAverageAux = (filteredCourses) =>
       grade = 0
     }
     
-    if (grade >= 5 && grade <= 10) {
+    if (grade >= MIN_PASSABLE_GRADE && grade <= MAX_PASSABLE_GRADE) {
       ects = ects === '-' ? 0 : ects;
-      accum.sum += parseFloat(grade) * parseInt(ects, 10);
-      accum.totalEcts += parseInt(ects, 10);
+      accum.sum += parseFloat(grade) * parseInt(ects, MAX_PASSABLE_GRADE);
+      accum.totalEcts += parseInt(ects, MAX_PASSABLE_GRADE);
     }
   }
   return accum;
@@ -96,8 +104,6 @@ const getNumberOfPassedElective = (courses, track, specialization, extraSpeciali
   let specPassed = [];
   let extraSpecPassed = [];
   let bothSpecsPassed = [];
-  let specDiff = 0;
-  let extraSpecDiff = 0;
   let totalPassedLength = 0;
 
   // Add courses available as 'basic' for this Track's Specializations
@@ -112,7 +118,7 @@ const getNumberOfPassedElective = (courses, track, specialization, extraSpeciali
     );
   }
 
-  electiveCoursesPassed= electiveCourses.filter(course => course.grade >= 5 && course.grade <= 10);
+  electiveCoursesPassed= electiveCourses.filter(course => course.grade >= MIN_PASSABLE_GRADE && course.grade <= MAX_PASSABLE_GRADE);
 
   // No Specs, just count whatever 4 basics of this Track
   if (specialization === '7') {
@@ -152,7 +158,6 @@ const getNumberOfPassedElective = (courses, track, specialization, extraSpeciali
     }
     else if (specPassed.length < 4) {
       totalPassedLength += specPassed.length;
-      specDiff = 4 - specPassed.length;
     }
 
     if (extraSpecPassed.length >= 4) {
@@ -160,14 +165,13 @@ const getNumberOfPassedElective = (courses, track, specialization, extraSpeciali
     }
     else if (extraSpecPassed.length < 4) {
       totalPassedLength += extraSpecPassed.length;
-      extraSpecDiff = 4 - extraSpecPassed.length;
     }
 
-    if (totalPassedLength >= 8) {
-      return 8;
+    if (totalPassedLength >= MAX_ELECTIVE_FOR_TWO_SPECS) {
+      return MAX_ELECTIVE_FOR_TWO_SPECS;
     }
     else {
-      return Math.min( totalPassedLength + bothSpecsPassed.length, 8)
+      return Math.min( totalPassedLength + bothSpecsPassed.length, MAX_ELECTIVE_FOR_TWO_SPECS)
     }
   }
 };
@@ -306,6 +310,42 @@ const MainPage = () => {
     : JSON.parse(localStorage.getItem('courses'))
   );
 
+  const [showModal, setShowModal] = useState(false);
+  // const [newCourse, setNewCourse] = useState({
+  //   course: "",
+  //   ects: 0,
+  //   grade: "",
+  //   type: "",
+  //   specialization: ""
+  // });
+
+  // const handleInputChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setNewCourse((prevState) => ({
+  //     ...prevState,
+  //     [name]: value,
+  //   }));
+  // };
+
+  const addNewCourse = (userCourse) => {
+    setCourses([...courses, userCourse]);
+    // setNewCourse({
+    //   title: "",
+    //   description: "",
+    //   instructor: "",
+    //   duration: "",
+    // });
+    // setShowModal(false);
+  };
+
+  const handleAddCourse = () => {
+    setShowModal(true);
+  }
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  }
+
   const [specAndExtraSpecTotal, setSpecAndExtraSpecTotal] = useState(
     !localStorage.getItem('specAndExtraSpecTotal')
     ? 0
@@ -343,10 +383,6 @@ const MainPage = () => {
     ? ""
     : JSON.parse(localStorage.getItem('average'))
   );
-
-  const addCourse = () => {
-    setCourses([...courses, { course: "New course", ects: 0, grade: "" }])
-  }
 
   const coursesByType = courses.reduce((groupedCourses, course) => {
     (groupedCourses[course.type] = groupedCourses[course.type] || []).push(course);
@@ -467,26 +503,26 @@ const MainPage = () => {
   const findCoursesPassed = () => {
     // Compulsory
     const compTotal = courses.filter(course => course.type === "compulsory");
-    const compPassed = compTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+    const compPassed = compTotal.filter(course => course.grade >= MIN_PASSABLE_GRADE && course.grade <= MAX_PASSABLE_GRADE);
 
     // General Education
     const genEduTotal = courses.filter(course => course.type === "general-edu");
-    const genEduPassed = genEduTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+    const genEduPassed = genEduTotal.filter(course => course.grade >= MIN_PASSABLE_GRADE && course.grade <= MAX_PASSABLE_GRADE);
 
     // Thesis
     const thesisTotal = courses.filter(course => course.type === "thesis");
-    const thesisPassed = thesisTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+    const thesisPassed = thesisTotal.filter(course => course.grade >= MIN_PASSABLE_GRADE && course.grade <= MAX_PASSABLE_GRADE);
 
     // Project
     const projectCourses = courses.filter(course => 
       course.projectFor === track
     );
-    const projectPassed = projectCourses.filter(course => course.grade >= 5 && course.grade <= 10);
+    const projectPassed = projectCourses.filter(course => course.grade >= MIN_PASSABLE_GRADE && course.grade <= MAX_PASSABLE_GRADE);
 
     // Track compulsory (calculate separately those needed for spec and those available for track)
     const trackCompCoursesAll = courses.filter(course => course.type === "track-compulsory");
     const trackAndSpecTotal = filterTrackCompCourses(trackCompCoursesAll, track, specialization, extraSpecialization);
-    const trackCompPassed = trackAndSpecTotal.trackCompTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+    const trackCompPassed = trackAndSpecTotal.trackCompTotal.filter(course => course.grade >= MIN_PASSABLE_GRADE && course.grade <= MAX_PASSABLE_GRADE);
 
     const trackCompPassedToCount = specialization === '7'
       ? Math.min(4, trackCompPassed.length) // No spec, up to 4 comp can count 
@@ -496,15 +532,15 @@ const MainPage = () => {
           ? Math.min(1, trackCompPassed.length) // 2 specs selected with 1 common course, up to 1 comp can count
           : 0 // 2 specs selected without common courses, NO comp can count
     ;
-    const specializationPassed = trackAndSpecTotal.specializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
-    const extraSpecializationPassed = trackAndSpecTotal.extraSpecializationTotal.filter(course => course.grade >= 5 && course.grade <= 10);
+    const specializationPassed = trackAndSpecTotal.specializationTotal.filter(course => course.grade >= MIN_PASSABLE_GRADE && course.grade <= MAX_PASSABLE_GRADE);
+    const extraSpecializationPassed = trackAndSpecTotal.extraSpecializationTotal.filter(course => course.grade >= MIN_PASSABLE_GRADE && course.grade <= MAX_PASSABLE_GRADE);
 
     const electiveAll = courses.filter(course => course.specialization);
     const electiveTotalNumber = extraSpecialization === '7'
       // Only Track or only Track and Spec chosen, no Extra Spec, 4 elective needed
-      ? 4
+      ? MAX_ELECTIVE_FOR_TRACK
       // Both Spec chosen and Extra Spec chosen, 4 elective needed for each
-      : 8
+      : MAX_ELECTIVE_FOR_TWO_SPECS
     ;
 
     const electivePassedNumber = getNumberOfPassedElective(electiveAll, track, specialization, extraSpecialization);
@@ -534,7 +570,7 @@ const MainPage = () => {
           const isNeededForSpec = course.neededFor.includes(`s${specialization}`) && !course.neededFor.includes(`${extraSpecialization}`)
           const isNeededForExtraSpec = !course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
           const isNeededForBothSpecs = course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
-          const isAvailableForTrackA = course.neededFor.split(";").some(s => ["s1", "s2", "s3"].includes(s));
+          const isAvailableForTrackA = course.neededFor.split(";").some(s => TRACK_A_SPECIALIZATIONS.includes(s));
           // Course is available for Track "A" but not needed for current Specializations
           if (isAvailableForTrackA && !isNeededForSpec && !isNeededForExtraSpec && !isNeededForBothSpecs) {
             className = "course-row highlighted-row-track";
@@ -561,7 +597,7 @@ const MainPage = () => {
           const isNeededForSpec = course.neededFor.includes(`s${specialization}`) && !course.neededFor.includes(`${extraSpecialization}`)
           const isNeededForExtraSpec = !course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
           const isNeededForBothSpecs = course.neededFor.includes(`s${specialization}`) && course.neededFor.includes(`${extraSpecialization}`);
-          const isAvailableForTrackB = course.neededFor.split(";").some(s => ["s4", "s5", "s6"].includes(s));
+          const isAvailableForTrackB = course.neededFor.split(";").some(s => TRACK_B_SPECIALIZATIONS.includes(s));
           // Course is available for Track "B" but not needed for current Specialization
           if (isAvailableForTrackB && !isNeededForSpec && !isNeededForExtraSpec && !isNeededForBothSpecs) {
             className = "course-row highlighted-row-track";
@@ -587,8 +623,8 @@ const MainPage = () => {
         const isNeededForSpec = course.specialization.includes(`s${specialization}`) && !course.specialization.includes(`${extraSpecialization}`)
         const isNeededForExtraSpec = !course.specialization.includes(`s${specialization}`) && course.specialization.includes(`${extraSpecialization}`);
         const isNeededForBothSpecs = course.specialization.includes(`s${specialization}`) && course.specialization.includes(`${extraSpecialization}`);
-        const isAvailableForTrackA = course.specialization.split(";").some(s => ["s1", "s2", "s3"].includes(s));
-        const isAvailableForTrackB = course.specialization.split(";").some(s => ["s4", "s5", "s6"].includes(s));
+        const isAvailableForTrackA = course.specialization.split(";").some(s => TRACK_A_SPECIALIZATIONS.includes(s));
+        const isAvailableForTrackB = course.specialization.split(";").some(s => TRACK_B_SPECIALIZATIONS.includes(s));
 
         if (track === "A") {
           // Course is available for Track "A" but not needed for current Specializations
@@ -758,12 +794,24 @@ const MainPage = () => {
               </tbody>
             </React.Fragment>
           ))}
+          <tbody>
+            <tr className="grouplabel">
+              <th colSpan="3" className="section-label section-button">
+                <button onClick={handleAddCourse}>Προσθήκη μαθήματος</button>
+              </th>
+            </tr>
+          </tbody>
       </table>
-      <button onClick={addCourse}>Add Row</button>
+
+      {/* <button onClick={handleAddCourse}>Προσθήκη μαθήματος</button> */}
+      <AddCourseModal
+        showModal={showModal}
+        closeModal={handleModalClose}
+        addNewCourse={addNewCourse}
+      />
+
     </div>
   );
 }
 
 export default MainPage;
-
-// TO DO: ΝΑ ελέγχει αν είναι τα πράσινα 4,3 ή 2 για τα track comp courses
