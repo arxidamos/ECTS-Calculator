@@ -1,4 +1,4 @@
-form {
+form.search-form, .student-info-form {
   width: 90%;
   max-width: 800px;
   margin: auto;
@@ -25,19 +25,19 @@ form.search-form > input {
   font-size: 90%;
 }
 
-form:hover {
+form.search-form:hover, .student-info-form:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.search-form:hover  img {
+.search-form:hover img {
   transform: scale(1.05);
 }
 
-.search-form:hover  input {
+.search-form:hover input {
   font-weight: bold;
 }
 
-form :focus {
+form.search-form :focus {
   font-weight: bold;
   outline: none;
 }

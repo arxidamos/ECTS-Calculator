@@ -13,6 +13,8 @@ const MAX_ELECTIVE_FOR_TRACK = 4;
 const MAX_ELECTIVE_FOR_TWO_SPECS = 8;
 const MIN_PASSABLE_GRADE = 5;
 const MAX_PASSABLE_GRADE = 10;
+const GRADE_STYLE_NUMBERS = /^([0-9]|10)([,.]\d{1,2})?$/
+
 
 const sanitize = (string) => {
   return string
@@ -74,8 +76,6 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
   }
 
   if (specialization !== "7") {
-    // console.log(`program thinks specialization has been chosen`)
-    // console.log(specialization)
     specializationCourses = courses.filter(course =>
       course.neededFor.includes(`s${specialization}`)
     );
@@ -90,7 +90,6 @@ const filterTrackCompCourses = (courses, track, specialization, extraSpecializat
   if ((specializationCourses.length + extraSpecializationCourses.length) === 4) {
     trackCourses = [];
   }
-  // console.log(specializationCourses, extraSpecializationCourses)
   return {
     trackCompTotal: trackCourses,
     specializationTotal: specializationCourses,
@@ -329,6 +328,7 @@ const MainPage = () => {
 
   const addNewCourse = (userCourse) => {
     setCourses([...courses, userCourse]);
+    console.log(userCourse);
     // setNewCourse({
     //   title: "",
     //   description: "",
@@ -384,10 +384,20 @@ const MainPage = () => {
     : JSON.parse(localStorage.getItem('average'))
   );
 
-  const coursesByType = courses.reduce((groupedCourses, course) => {
-    (groupedCourses[course.type] = groupedCourses[course.type] || []).push(course);
-    return groupedCourses;
-  }, {});
+  const [coursesByType, setCoursesByType] = useState({});
+
+  // const coursesByType = courses.reduce((groupedCourses, course) => {
+  //   (groupedCourses[course.type] = groupedCourses[course.type] || []).push(course);
+  //   return groupedCourses;
+  // }, {});
+
+  useEffect( ()=> {
+    const coursesByType = courses.reduce((groupedCourses, course) => {
+      (groupedCourses[course.type] = groupedCourses[course.type] || []).push(course);
+      return groupedCourses;
+    }, {});
+    setCoursesByType(coursesByType);
+  }, [courses]);
 
   const getLabelFromType = (type) => {
     switch (type) {
@@ -742,7 +752,7 @@ const MainPage = () => {
                                       : getClassName(course).includes("highlighted-row-elective-extra-spec")
                                         ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΕΥΣΗΣ <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong> - ΧΡΕΙΑΖΟΝΤΑΙ 4</span>} />
                                         : getClassName(course).includes("highlighted-row-elective-both-specs")
-                                          ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΕΥΣΕΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΧΡΕΙΑΖΟΝΤΑΙ 4, ΜΕΤΡΑΕΙ ΜΟΝΟ ΓΙΑ ΤΗ ΜΙΑ</span>} />
+                                          ? <InfoTip className="info-tip" text={<span>ΒΑΣΙΚΟ ΕΙΔΙΚΕΥΣΕΩΝ <strong style={{ fontSize: '10px' }}>S{specialization}</strong>, <strong style={{ fontSize: '10px' }}>S{extraSpecialization}</strong>  - ΜΕΤΡΑΕΙ ΜΟΝΟ ΓΙΑ ΤΗ ΜΙΑ</span>} />
                                           : null
                         }
                         <div className="course-text-container">
@@ -755,7 +765,7 @@ const MainPage = () => {
                         </div>
                       </td>
                       <td data-label="ECTS" className="ects-cell">
-                        <input className="course-input" type="text" value={course.ects} onChange={(e) => {
+                        <input className="course-input" type="text" inputMode="decimal" value={course.ects} onChange={(e) => {
                           const newCourses = [...courses];
                           const currentIndex = getIndex(courses, course);
                           newCourses[currentIndex].ects = e.target.value;
@@ -766,6 +776,7 @@ const MainPage = () => {
                         <input
                           className="course-input"
                           type="text"
+                          inputMode="decimal"
                           onFocus={(e) => {
                             if (e.target.value === '-') {
                               e.target.value = '';
@@ -779,7 +790,7 @@ const MainPage = () => {
                             const newCourses = [...courses];
                             const currentIndex = getIndex(courses, course);
                             newCourses[currentIndex].grade = e.target.value;
-                            newCourses[currentIndex].completed = (e.target.value >= 5 && e.target.value <= 10) ? true : false;
+                            newCourses[currentIndex].completed = (e.target.value >= MIN_PASSABLE_GRADE && e.target.value <= MAX_PASSABLE_GRADE) ? true : false;
                             setCourses(newCourses);
                           }}
                           onKeyDown={(e) => {
@@ -808,6 +819,7 @@ const MainPage = () => {
         showModal={showModal}
         closeModal={handleModalClose}
         addNewCourse={addNewCourse}
+        setShowModal={setShowModal}
       />
 
     </div>
