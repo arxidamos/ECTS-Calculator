@@ -12,39 +12,6 @@ function AddCourseModal({ showModal, setShowModal, closeModal, addNewCourse }) {
   const [validEcts, setValidEcts] = useState(true);
   const [validGrade, setValidGrade] = useState(true);
 
-  // const handleNameChange = (event) => {
-  //   setName(event.target.value);
-  //   if (!event.target.value) {
-  //     setNameError("Υποχρεωτικό πεδίο");
-  //   } else {
-  //     setNameError("");
-  //   }
-  // };
-
-  // const handleEctsChange = (event) => {
-  //   setEcts(event.target.value);
-  //   if (!event.target.value) {
-  //     setEctsError("Υποχρεωτικό πεδίο");
-  //   } else if (isNaN(event.target.value)) {
-  //     setEctsError("Πρέπει να είναι αριθμός");
-  //   } else if (event.target.value < 2) {
-  //     setEctsError("Πρέπει να είναι μεγαλύτερο από 1");
-  //   } else {
-  //     setEctsError("");
-  //   }
-  // };
-
-  // const handleGradeChange = (event) => {
-  //   setGrade(event.target.value);
-  //   if (isNaN(event.target.value)) {
-  //     setGradeError("Πρέπει να είναι αριθμός");
-  //   } else if (event.target.value < 0 || event.target.value > 10) {
-  //     setGradeError("Πρέπει να είναι από 0 έως 10");
-  //   } else {
-  //     setGradeError("");
-  //   }
-  // };
-
   const handleNameChange = (event) => {
     const value = event.target.value;
     setName(value);
@@ -60,7 +27,6 @@ function AddCourseModal({ showModal, setShowModal, closeModal, addNewCourse }) {
   const handleGradeChange = (event) => {
     const value = event.target.value;
     setGrade(value);
-    // setValidGrade(value === "" || (Number.isInteger(parseFloat(value)) && parseInt(value) >= 0 && parseInt(value) <= 10) || !numbersOnly.test(value));
     setValidGrade(gradeStyleNumbers.test(value));
   };
 
@@ -86,7 +52,6 @@ function AddCourseModal({ showModal, setShowModal, closeModal, addNewCourse }) {
         setGrade(value);
         console.log(`grade=${grade}`);
         setValidGrade(gradeStyleNumbers.test(value));
-        // setValidGrade(value === "" || (Number.isInteger(parseFloat(value)) && parseInt(value) >= 0 && parseInt(value) <= 10));
         break;
       default:
         break;
@@ -96,45 +61,27 @@ function AddCourseModal({ showModal, setShowModal, closeModal, addNewCourse }) {
 
   const handleOk = (event) => {
     event.preventDefault();
-    // if (!name || !ects || !grade) {
-    //   alert("Παρακαλούμε συμπληρώστε τα υποχρεωτικά πεδία");
-    //   return;
-    // }
-    // if (nameError || ectsError || gradeError) {
-    //   alert("Παρακαλούμε συμπληρώστε σωστά τα πεδία");
-    //   return;
-    // }
-    
-    // if (name && ects) {
-    //   const newCourse = {name, ects, grade};
-    //   addNewCourse({
-    //     userCourse: newCourse
-    //   });
-    // }
-  
     validateInput('course', name);
     validateInput('ects', ects);
     validateInput('grade', grade);
 
     if (validName && validEcts && validGrade) {
-      const newCourse = {course: name, ects: ects, grade: grade, type: "elective-specialization"};
       addNewCourse({
-        // userCourse: newCourse
-        course: name, ects: ects, grade: grade, type: "elective-specialization", completed: grade >= 5 && grade <= 10 ? true : false
+        course: name,
+        ects: ects,
+        grade: grade,
+        type: "elective-specialization",
+        completed: grade >= 5 && grade <= 10
+          ? true
+          : false
       });
 
       closeModal();
-      // validateInput('course', '1');
-      // validateInput('ects', 2);
-      // validateInput('grade', 5);
+      setName("");
+      setEcts("");
+      setGrade("");
     }
   };
-
-
-
-  // if (!showModal) {
-  //   return null;
-  // }
 
   const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) {
