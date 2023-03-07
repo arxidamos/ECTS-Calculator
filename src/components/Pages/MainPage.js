@@ -3,6 +3,7 @@ import './MainPage.css'
 import Search from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/Search/Search';
 import StudentInfo from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/StudentInfo/StudentInfo'
 import AddCourseModal from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/AddCourseModal/AddCourseModal'
+import FloatingButton from '../FloatingButton/FloatingButton';
 
 import checkmark from '/home/dimos/Desktop/ectsTool/ects-tool/src/checkmark.svg'
 import closemark from '/home/dimos/Desktop/ectsTool/ects-tool/src/empty.svg';
@@ -14,7 +15,6 @@ const MAX_ELECTIVE_FOR_TWO_SPECS = 8;
 const MIN_PASSABLE_GRADE = 5;
 const MAX_PASSABLE_GRADE = 10;
 const GRADE_STYLE_NUMBERS = /^([0-9]|10)([,.]\d{1,2})?$/
-
 
 const sanitize = (string) => {
   return string
@@ -310,32 +310,9 @@ const MainPage = () => {
   );
 
   const [showModal, setShowModal] = useState(false);
-  // const [newCourse, setNewCourse] = useState({
-  //   course: "",
-  //   ects: 0,
-  //   grade: "",
-  //   type: "",
-  //   specialization: ""
-  // });
-
-  // const handleInputChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setNewCourse((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }));
-  // };
 
   const addNewCourse = (userCourse) => {
     setCourses([...courses, userCourse]);
-    console.log(userCourse);
-    // setNewCourse({
-    //   title: "",
-    //   description: "",
-    //   instructor: "",
-    //   duration: "",
-    // });
-    // setShowModal(false);
   };
 
   const handleAddCourse = () => {
@@ -386,11 +363,7 @@ const MainPage = () => {
 
   const [coursesByType, setCoursesByType] = useState({});
 
-  // const coursesByType = courses.reduce((groupedCourses, course) => {
-  //   (groupedCourses[course.type] = groupedCourses[course.type] || []).push(course);
-  //   return groupedCourses;
-  // }, {});
-
+  // Add on display, based on course type, any new courses
   useEffect( ()=> {
     const coursesByType = courses.reduce((groupedCourses, course) => {
       (groupedCourses[course.type] = groupedCourses[course.type] || []).push(course);
@@ -821,7 +794,7 @@ const MainPage = () => {
         addNewCourse={addNewCourse}
         setShowModal={setShowModal}
       />
-
+    <FloatingButton />
     </div>
   );
 }
