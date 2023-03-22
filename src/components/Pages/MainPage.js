@@ -678,9 +678,9 @@ const MainPage = () => {
                       <th colSpan="3" className="section-label">{getLabelFromType(type)}</th>
                     </tr>
                     <tr>
-                      <th className="column-header column-header-course">Course</th>
+                      <th className="column-header column-header-course">Μάθημα</th>
                       <th className="column-header column-header-ects">ECTS</th>
-                      <th className="column-header column-header-grade">Grade</th>
+                      <th className="column-header column-header-grade">Βαθμός</th>
                     </tr>
                   </thead>
                 )}
@@ -745,7 +745,7 @@ const MainPage = () => {
                           setCourses(newCourses);
                         }} />
                       </td>
-                      <td data-label="Grade" className="grade-cell">
+                      <td data-label="Βαθμός" className="grade-cell">
                         <input
                           className="course-input"
                           type="text"
