@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import MainPage from './components/Pages/MainPage';
@@ -12,16 +12,21 @@ import TermsOfService from './components/Pages/TermsOfService';
 function App() {
   const [coursesData, setCoursesData] = useState([]);
 
-  const handleCoursesDataUpdate = (newData) => {
-    setCoursesData(newData);
-  };
+  // const handleCoursesDataUpdate = (newData) => {
+  //   setCoursesData(newData);
+  // };
+
+  // useEffect(() => {
+  //   setCoursesData(coursesData);
+  //   console.log(coursesData[0]);
+  // }, [coursesData])
 
   return (
     <BrowserRouter>
       <Navigation />
       <div className="pages">
         <Routes>
-          <Route path="/" element={ <MainPage onDataUpdate={handleCoursesDataUpdate} /> } />
+          <Route path="/" element={ <MainPage coursesData={coursesData} setCoursesData={setCoursesData} /> } />
           <Route path="/download" element={ <Export coursesData={coursesData} /> } />
           <Route path="/contact" element={ <Contact /> } />
           <Route path="/privacy-policy" element={ <PrivacyPolicy /> } />

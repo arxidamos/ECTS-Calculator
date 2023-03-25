@@ -181,7 +181,7 @@ const InfoTip = ({ text }) => (
   </span>
 );
 
-const MainPage = ({ onDataUpdate }) => {
+const MainPage = ({ coursesData, setCoursesData }) => {
   // Get courses from localStorage, otherwise use inital courses array
   const [courses, setCourses] = useState(
     !localStorage.getItem('courses')
@@ -309,12 +309,15 @@ const MainPage = ({ onDataUpdate }) => {
     : JSON.parse(localStorage.getItem('courses'))
   );
 
-  onDataUpdate(courses);
+
+  // setCoursesData(courses);
 
   const [showModal, setShowModal] = useState(false);
 
   const addNewCourse = (userCourse) => {
     setCourses([...courses, userCourse]);
+    setCoursesData([...courses, userCourse]);
+
   };
 
   const handleAddCourse = () => {
@@ -400,6 +403,7 @@ const MainPage = ({ onDataUpdate }) => {
     const storedCourses = localStorage.getItem('courses');
     if (storedCourses) {
       setCourses(JSON.parse(storedCourses));
+      setCoursesData(JSON.parse(storedCourses));
     }
 
     const storedTrack = localStorage.getItem('track');
@@ -745,6 +749,7 @@ const MainPage = ({ onDataUpdate }) => {
                           const currentIndex = getIndex(courses, course);
                           newCourses[currentIndex].ects = e.target.value;
                           setCourses(newCourses);
+                          setCoursesData(newCourses);
                         }} />
                       </td>
                       <td data-label="Βαθμός" className="grade-cell">
@@ -767,6 +772,7 @@ const MainPage = ({ onDataUpdate }) => {
                             newCourses[currentIndex].grade = e.target.value;
                             newCourses[currentIndex].completed = (e.target.value >= MIN_PASSABLE_GRADE && e.target.value <= MAX_PASSABLE_GRADE) ? true : false;
                             setCourses(newCourses);
+                            setCoursesData(newCourses);
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {

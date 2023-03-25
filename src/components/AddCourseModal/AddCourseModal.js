@@ -40,23 +40,19 @@ function AddCourseModal({ showModal, setShowModal, closeModal, addNewCourse }) {
     switch (id) {
       case 'course':
         setName(value);
-        console.log(`name=${name}`);
         setValidName(value !== "");
         break;
       case 'ects':
         setEcts(value);
-        console.log(`ects=${ects}`);
         setValidEcts(value !== "" && Number.isInteger(parseFloat(value)) && parseInt(value) >= 2);
         break;
       case 'grade':
         setGrade(value);
-        console.log(`grade=${grade}`);
         setValidGrade(gradeStyleNumbers.test(value));
         break;
       default:
         break;
     }
-    console.log(validName, validEcts, validGrade)
   };
 
   const handleOk = (event) => {

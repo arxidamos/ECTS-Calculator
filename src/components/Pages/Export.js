@@ -8,7 +8,7 @@ function convertToExcel(courses) {
   return workbook;
 }
 
-function downloadFile(workbook, filename) {
+function downloadAsExcel(workbook, filename) {
   // Generate binary data for excel file
   const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
   
@@ -44,24 +44,51 @@ function downloadFile(workbook, filename) {
   }
 }
 
+function downloadAsJson(data, filename) {
+  const jsonData = JSON.stringify(data);
+  const blob = new Blob([jsonData], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 0);
+}
+
 const Export = ({ coursesData }) => {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    setCourses(coursesData);
+    const translatedData = coursesData.map(item => ({
+      ΜΑΘΗΜΑ: item.course,
+      ECTS: item.ects,
+      ΒΑΘΜΟΣ: item.grade,
+    }));
+    setCourses(translatedData);
   }, [coursesData])
 
 
-  const handleDownload = () => {
+  const handleExcelDownload = () => {
     const workbook = convertToExcel(courses);
-    downloadFile(workbook, 'data.xlsx');
+    downloadAsExcel(workbook, 'data.xlsx');
+  };
+
+  const handleJsonDownload = () => {
+    downloadAsJson(courses, 'data.json');
   };
 
   return (
     <div>
-      {/* <h1>Export</h1> */}
-      <button onClick={handleDownload}>
-        Download
+      <h1>Εξαγωγή βαθμολογίας σε Excel</h1>
+      <button onClick={handleExcelDownload}>
+        Κατέβασμα Excel
+      </button>
+      <button onClick={handleJsonDownload}>
+        Κατέβασμα JSON
       </button>
     </div>
   );

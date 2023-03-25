@@ -49,9 +49,8 @@ const StudentInfo = ({ track, setTrack, specialization, setSpecialization, extra
     if (specialization === extraSpecialization) {
       setExtraSpecialization('7');
     }
-    console.log(`spec=${specialization}, extra=${extraSpecialization}`)
-
   }, [track, specialization, extraSpecialization])
+  
   return (
     <form className="student-info-form">
       <label className="grid-item" htmlFor="track">Κατεύθυνση</label>
