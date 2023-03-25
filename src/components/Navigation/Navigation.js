@@ -53,11 +53,11 @@ const Navigation = () => {
             </li>
             <li className="nav-item">
               <NavLink
-                to="/about"
+                to="/download"
                 className="nav-links"
                 onClick={handleClick}
               >
-                About
+                Download
               </NavLink>
             </li>
             <li className="nav-item">

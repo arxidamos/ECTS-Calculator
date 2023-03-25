@@ -181,7 +181,7 @@ const InfoTip = ({ text }) => (
   </span>
 );
 
-const MainPage = () => {
+const MainPage = ({ onDataUpdate }) => {
   // Get courses from localStorage, otherwise use inital courses array
   const [courses, setCourses] = useState(
     !localStorage.getItem('courses')
@@ -308,6 +308,8 @@ const MainPage = () => {
     ]
     : JSON.parse(localStorage.getItem('courses'))
   );
+
+  onDataUpdate(courses);
 
   const [showModal, setShowModal] = useState(false);
 
