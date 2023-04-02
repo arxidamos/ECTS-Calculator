@@ -1,0 +1,53 @@
+.button-area {
+  margin: 2em;
+  padding: 0 2em;
+  display: grid;
+  gap: 1em;
+  justify-items: center;
+}
+
+.chunky-button {
+  width: 60%;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 1em 0;
+  border-radius: 3px;
+  background-color: #195190;
+  color: #c7d3d4;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border: none;
+}
+
+.chunky-button:hover {
+  opacity: .9;
+  color: #fcf6f5;
+}
+
+.chunky-button:active {
+  background-color: #123a68;
+  transform: scale(0.99);
+  color: #fcf6f5;
+}
+
+.chunky-button:hover:before {
+  transform: translateY(5px);
+}
+
+.chunky-button:after {
+  content: "";
+  display: inline-block;
+  margin-left: .5em;
+  width: 0;
+  height: 0;
+  border-top: 8px solid #c7d3d4;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+  vertical-align: middle;
+  transition: all 0.2s ease-in-out;
+}
+
+.chunky-button:hover:after {
+  border-top: 8px solid #fcf6f5;
+}
