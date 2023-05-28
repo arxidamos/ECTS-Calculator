@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from 'xlsx';
 import './Export.css'
-// import existingExcel from '/home/dimos/Desktop/ectsTool/ects-tool/src/Οδηγός για την λήψη πτυχίου.xls'
 
 const convertToExcel = (courses) => {
   const workbook = XLSX.utils.book_new();
@@ -48,32 +47,33 @@ const downloadAsExcel = (workbook, filename) => {
 
 const sendCoursesReceiveExcel = async (data, filename) => {
   try {
-    const response = await fetch('http://localhost:5000/api/updateExcel', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-    // const responseData = await response.json();
-    // return responseData;
-    if (!response.ok) {
-      throw new Error('Response from server not ok');
-    }
+    console.log(data.programInfo);
+    // const response = await fetch('http://localhost:5000/api/updateExcel', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(data)
+    // });
+    // // const responseData = await response.json();
+    // // return responseData;
+    // if (!response.ok) {
+    //   throw new Error('Response from server not ok');
+    // }
 
-    // Get xlsx from response
-    const blob = await response.blob();
+    // // Get xlsx from response
+    // const blob = await response.blob();
 
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }, 0);
+    // const url = window.URL.createObjectURL(blob);
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.download = filename;
+    // document.body.appendChild(a);
+    // a.click();
+    // setTimeout(() => {
+    //   document.body.removeChild(a);
+    //   window.URL.revokeObjectURL(url);
+    // }, 0);
   }
   catch (error) {
     console.error(error);
@@ -125,19 +125,17 @@ const downloadAsJson = (data, filename) => {
 //   XLSX.writeFile(workbook, 'excel_me_vathmous.xlsx');
 // }
 
-const Export = ({ coursesData }) => {
+const Export = ({ coursesData, programData }) => {
   const [courses, setCourses] = useState([]);
+  const [programInfo, setProgramInfo] = useState([]);
 
   useEffect(() => {
-    // const translatedData = coursesData.map(item => ({
-    //   ΜΑΘΗΜΑ: item.course,
-    //   ECTS: item.ects,
-    //   ΒΑΘΜΟΣ: item.grade,
-    // }));
-    // setCourses(translatedData);
     setCourses(coursesData);
   }, [coursesData])
 
+  useEffect(() => {
+    setProgramInfo(programData);
+  }, [programData])
 
   const handleExcelDownload = () => {
     const workbook = convertToExcel(courses);
@@ -151,7 +149,8 @@ const Export = ({ coursesData }) => {
   const handleSpecialDownload = async () => {
     // readExcelFile(courses);
     try {
-      await sendCoursesReceiveExcel(courses, 'Οδηγός για τη λήψη πτυχίου.xlsx');
+      console.log(courses[0]);
+      await sendCoursesReceiveExcel({courses: courses, programInfo: programInfo}, 'Οδηγός για τη λήψη πτυχίου.xlsx');
     }
     catch (error) {
       console.error(error);

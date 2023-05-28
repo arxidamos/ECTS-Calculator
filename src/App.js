@@ -10,7 +10,22 @@ import PrivacyPolicy from './components/Pages/PrivacyPolicy';
 import TermsOfService from './components/Pages/TermsOfService';
 
 function App() {
-  const [coursesData, setCoursesData] = useState([]);
+  const [coursesData, setCoursesData] = useState(
+    !localStorage.getItem('coursesData')
+      ? []
+      : JSON.parse(localStorage.getItem('coursesData'))
+  );
+
+  const [programData, setProgramData] = useState(
+    !localStorage.getItem('programData')
+      ? {
+        track: "A",
+        spec: "",
+        extraSpec: ""
+      }
+      : JSON.parse(localStorage.getItem('programData'))
+  );
+
 
   // const handleCoursesDataUpdate = (newData) => {
   //   setCoursesData(newData);
@@ -26,8 +41,8 @@ function App() {
       <Navigation />
       <div className="pages">
         <Routes>
-          <Route path="/" element={ <MainPage coursesData={coursesData} setCoursesData={setCoursesData} /> } />
-          <Route path="/download" element={ <Export coursesData={coursesData} /> } />
+          <Route path="/" element={ <MainPage coursesData={coursesData} setCoursesData={setCoursesData} programData={programData} setProgramData={setProgramData} /> } />
+          <Route path="/download" element={ <Export coursesData={coursesData} programData={programData} /> } />
           <Route path="/contact" element={ <Contact /> } />
           <Route path="/privacy-policy" element={ <PrivacyPolicy /> } />
           <Route path="/terms-of-service" element={ <TermsOfService /> } />

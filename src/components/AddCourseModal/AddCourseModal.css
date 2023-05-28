@@ -108,7 +108,6 @@ input[type=number] {
 .modal-buttons button {
   padding: 10px;
   border: none;
-  /* border-radius: 5px; */
   font-size: 16px;
   cursor: pointer;
 }
@@ -138,10 +137,8 @@ transform: scale(0.99);
 background-color: #123a68;
 }
 
-
 .invalid {
   color: #C70039;
-  /* outline-color: #C70039; */
 }
 
 .invalid + input {
