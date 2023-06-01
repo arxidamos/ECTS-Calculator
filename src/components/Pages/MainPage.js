@@ -364,13 +364,14 @@ const MainPage = ({ coursesData, setCoursesData, programData, setProgramData }) 
 
   const [coursesByType, setCoursesByType] = useState({});
 
-  // Add on display, based on course type, any new courses
+  // Add to courses on display, based on course type, any new courses
   useEffect( ()=> {
     const coursesByType = courses.reduce((groupedCourses, course) => {
       (groupedCourses[course.type] = groupedCourses[course.type] || []).push(course);
       return groupedCourses;
     }, {});
     setCoursesByType(coursesByType);
+    console.log(coursesData[0]);
   }, [courses]);
 
   const getLabelFromType = (type) => {
@@ -393,6 +394,16 @@ const MainPage = ({ coursesData, setCoursesData, programData, setProgramData }) 
         return "Προαιρετικά"
     }
   }
+
+  // Each time track, specialization, extra specialization change, update programData
+  useEffect( () => {
+    setProgramData({
+      track: track,
+      spec: specialization,
+      extraSpec: extraSpecialization
+    });
+    console.log(`program data inside mainPage:`, programData);
+  }, [track, specialization, extraSpecialization])
 
   // Each time component refreshes, retrieve from localStorage
   useEffect(() => {
