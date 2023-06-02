@@ -65,12 +65,7 @@ const Export = ({ coursesData, programData }) => {
 
   useEffect(() => {
     setProgramInfo(programData);
-    console.log(programInfo);
   }, [programData])
-
-  // useEffect(() => {
-  //   console.log(loading)
-  // }, [loading])
 
   const handleJsonDownload = () => {
     downloadAsJson(courses, 'data.json');

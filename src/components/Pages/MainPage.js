@@ -371,7 +371,7 @@ const MainPage = ({ coursesData, setCoursesData, programData, setProgramData }) 
       return groupedCourses;
     }, {});
     setCoursesByType(coursesByType);
-    console.log(coursesData[0]);
+    console.log(coursesData[3]);
   }, [courses]);
 
   const getLabelFromType = (type) => {
