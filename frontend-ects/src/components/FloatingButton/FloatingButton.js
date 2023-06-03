@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import arrowUp from '/home/dimos/Desktop/ectsTool/ects-tool/src/arrow-up.svg';
+import arrowUp from '../../arrow-up.svg';
 
 import './FloatingButton.css';
 

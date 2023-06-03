@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
+import './Contact.css'
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -51,34 +52,84 @@ const Contact = () => {
       alert('An error occurred while submitting the form.');
     }
   };
+  
+
+  const [validName, setValidName] = useState(true);
+  const [validEmail, setValidEmail] = useState(true);
+  const [validMessage, setValidMessage] = useState(true);
+
+  const handleNameChange = (event) => {
+    const value = event.target.value;
+    setName(value);
+    setValidName(value !== "");
+  };
+  
+  const handleEmailChange = (event) => {
+    const value = event.target.value;
+    setEmail(value);
+    setValidEmail(value !== "");
+  };
+  
+  const handleMessageChange = (event) => {
+    const value = event.target.value;
+    setMessage(value);
+    setValidMessage(message !== "");
+  };
+
+  // useEffect (() => {
+  //   validateInput('name', name);
+  //   validateInput('email', email);
+  //   validateInput('message', message);
+  // }, [])
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <textarea
-        placeholder="Message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        required
-      />
-      <ReCAPTCHA
-        sitekey="YOUR_RECAPTCHA_SITE_KEY"
-        onChange={(response) => setRecaptchaResponse(response)}
-      />
-      <button type="submit">Submit</button>
+    <form className="contact-form" onSubmit={handleFormSubmit}>
+        <div className="contact-form-group">
+          <label htmlFor="name" className={validName ? "" : "invalid"}>Όνομα{validName ? "" : " *"} </label>
+          <input
+            type="text"
+            id="name"
+            placeholder="Όνομα"
+            value={name}
+            onChange={handleNameChange}
+            required
+            className={validName ? "" : "invalid"}
+          />
+        </div>
+        <div className="contact-form-group">
+          <label htmlFor="email" className={validEmail ? "" : "invalid"}>E-mail{validEmail ? "" : " *"} </label>
+          <input
+            type="email"
+            id="ects"
+            placeholder="E-mail"
+            value={email}
+            onChange={handleEmailChange}
+            required
+            className={validEmail ? "" : "invalid"}
+          />
+        </div>
+        <div className="contact-form-group">
+          <label htmlFor="message" className={validMessage ? "" : "invalid"}>Μήνυμα{validMessage ? "" : " *"} </label>
+          <textarea
+            type="text"
+            id="message"
+            placeholder="Μήνυμα"
+            value={message}
+            onChange={handleMessageChange}
+            required
+            className={validMessage ? "" : "invalid"}
+          />
+        </div>
+        <div className="contact-form-group">
+          <ReCAPTCHA
+          className='captcha'
+            sitekey={process.env.REACT_APP_SITE_KEY}
+            onChange={(response) => setRecaptchaResponse(response)}
+          />
+        </div>
+        <div className="modal-buttons">
+          <button className="submit-button" type="submit" onClick={handleFormSubmit}>Υποβολή</button>
+        </div>
     </form>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import logo from '/home/dimos/Desktop/ectsTool/ects-tool/src/calculate.png';
-import burger from '/home/dimos/Desktop/ectsTool/ects-tool/src/menu.svg';
-import x_burger from '/home/dimos/Desktop/ectsTool/ects-tool/src/x.svg';
+import logo from '../../calculate.png';
+import burger from '../../menu.svg';
+import x_burger from '../../x.svg';
 
 import './Navigation.css';
 

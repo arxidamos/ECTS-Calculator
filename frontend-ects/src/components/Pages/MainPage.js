@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './MainPage.css'
-import Search from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/Search/Search';
-import StudentInfo from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/StudentInfo/StudentInfo'
-import AddCourseModal from '/home/dimos/Desktop/ectsTool/ects-tool/src/components/AddCourseModal/AddCourseModal'
+import Search from '../Search/Search'
+import StudentInfo from '../StudentInfo/StudentInfo'
+import AddCourseModal from '../AddCourseModal/AddCourseModal'
 import FloatingButton from '../FloatingButton/FloatingButton';
 
-import checkmark from '/home/dimos/Desktop/ectsTool/ects-tool/src/checkmark.svg'
-import closemark from '/home/dimos/Desktop/ectsTool/ects-tool/src/empty.svg';
+import checkmark from '../../checkmark.svg'
+import closemark from '../../empty.svg';
 
 const TRACK_A_SPECIALIZATIONS = ["s1", "s2", "s3"];
 const TRACK_B_SPECIALIZATIONS = ["s4", "s5", "s6"];

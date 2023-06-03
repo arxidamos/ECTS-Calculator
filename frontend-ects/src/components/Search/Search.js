@@ -1,6 +1,6 @@
 import React from 'react';
 import './Search.css'
-import searchIcon from '/home/dimos/Desktop/ectsTool/ects-tool/src/search.svg';
+import searchIcon from '../../search.svg';
 
 const Search = ({ searchTerm, setSearchTerm }) => {
   const handleChange = (e) => {
