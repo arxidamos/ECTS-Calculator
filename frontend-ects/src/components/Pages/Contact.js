@@ -2,30 +2,64 @@ import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './Contact.css'
 
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
+const validateInput = (name, email, message) => {
+  console.log (!(name === '') && (name.length > 2 && name.length < 31) && validateEmail(email) && !(message === ''))
+  return (!(name === '') && validateEmail(email) && !(message === ''))
+}
+
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  // const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-  const [recaptchaResponse, setRecaptchaResponse] = useState('');
+  const [helptext, setHelptext] = useState('');
+
+  const [validName, setValidName] = useState(true);
+  const [validEmail, setValidEmail] = useState(true);
+  const [validMessage, setValidMessage] = useState(true);
+
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    // validateInput('name', name);
+    // validateInput('email', email);
+    // validateInput('message', message);
 
-    // if (!isCaptchaVerified) {
-    //   // reCAPTCHA verification failed
+    setValidName((name !== '') && (name.length > 2 && name.length < 31));
+    setValidEmail(validateEmail(email));
+    setValidMessage(!(message === ''));
+    // if (!validName || !validEmail || !validMessage || !isCaptchaVerified) {
+    //   console.log(`Problem, cause ${name}, ${email}, ${message}, ${isCaptchaVerified}`)
+
     //   return;
     // }
+    
+    // Check if input is valid, using relevant vars and not validVar ones
+    if (!validateInput(name, email, message)) {
+      setHelptext('Δεν συμπληρώσατε σωστά όλα τα πεδία!');
+      console.log(`Problem, cause ${name}, ${email}, ${message}, ${isCaptchaVerified}`)
+      return;
+    }
 
-    // Verify the reCAPTCHA response before submitting the form
-    const recaptchaResponseToken = await window.grecaptcha.execute();
-    // Update the recaptchaResponse state with the token
-    setRecaptchaResponse(recaptchaResponseToken);
-    
-    
+    // Check if captcha is completed
+    if (!isCaptchaVerified) {
+      setHelptext('Δεν ολοκληρώσατε το CAPTCHA!');
+      console.log(`Problem, cause ${name}, ${email}, ${message}, ${isCaptchaVerified}`)
+      return;
+    }
+
     // Make an API call to the backend
     try {
-      const response = await fetch('/api/contact', {
+      console.log(`sending ${name}, ${email}, ${message}, ${isCaptchaVerified}`)
+      const response = await fetch('http://localhost:5000/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,44 +70,43 @@ const Contact = () => {
       if (response.ok) {
         // Handle successful form submission
         console.log('Form submitted successfully!');
-        alert('Form submitted successfully!');
+        alert('Το μήνυμα καταχωρήθηκε επιτυχώς.');
         // Clear form fields
         setName('');
         setEmail('');
         setMessage('');
-        setRecaptchaResponse('');
+        setIsCaptchaVerified(false);
+        setHelptext('');
       } else {
         // Handle form submission error
         const errorData = await response.json();
-        console.error('Failed to submit the form.');
+        console.error('Failed to submit the form:', errorData);
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error occurred during form submission:', error);
-      alert('An error occurred while submitting the form.');
+      alert('Είχαμε πρόβλημα με την καταχώρηση του μηνύματός σας.');
     }
   };
   
 
-  const [validName, setValidName] = useState(true);
-  const [validEmail, setValidEmail] = useState(true);
-  const [validMessage, setValidMessage] = useState(true);
-
   const handleNameChange = (event) => {
     const value = event.target.value;
     setName(value);
-    setValidName(value !== "");
+    console.log(name.length, name)
+    setValidName((prevName) => (value !== '') && (value.length > 2 && value.length < 31));
   };
   
   const handleEmailChange = (event) => {
     const value = event.target.value;
     setEmail(value);
-    setValidEmail(value !== "");
+    setValidEmail((prevEmail) => validateEmail(value));
   };
   
   const handleMessageChange = (event) => {
     const value = event.target.value;
     setMessage(value);
-    setValidMessage(message !== "");
+    setValidMessage((prevMessage) => message !== "");
   };
 
   // useEffect (() => {
@@ -83,53 +116,65 @@ const Contact = () => {
   // }, [])
 
   return (
-    <form className="contact-form" onSubmit={handleFormSubmit}>
-        <div className="contact-form-group">
-          <label htmlFor="name" className={validName ? "" : "invalid"}>Όνομα{validName ? "" : " *"} </label>
-          <input
-            type="text"
-            id="name"
-            placeholder="Όνομα"
-            value={name}
-            onChange={handleNameChange}
-            required
-            className={validName ? "" : "invalid"}
-          />
-        </div>
-        <div className="contact-form-group">
-          <label htmlFor="email" className={validEmail ? "" : "invalid"}>E-mail{validEmail ? "" : " *"} </label>
-          <input
-            type="email"
-            id="ects"
-            placeholder="E-mail"
-            value={email}
-            onChange={handleEmailChange}
-            required
-            className={validEmail ? "" : "invalid"}
-          />
-        </div>
-        <div className="contact-form-group">
-          <label htmlFor="message" className={validMessage ? "" : "invalid"}>Μήνυμα{validMessage ? "" : " *"} </label>
-          <textarea
-            type="text"
-            id="message"
-            placeholder="Μήνυμα"
-            value={message}
-            onChange={handleMessageChange}
-            required
-            className={validMessage ? "" : "invalid"}
-          />
-        </div>
-        <div className="contact-form-group">
-          <ReCAPTCHA
+    <form className="contact-form">
+      <div className="contact-form-group">
+        <label htmlFor="name" className={validName ? "" : "invalid"}>Όνομα{validName ? "" : " *"} </label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Όνομα"
+          value={name}
+          onChange={handleNameChange}
+          // onBlur={}
+          required
+          className={validName ? "" : "invalid"}
+        />
+      </div>
+      <div className="contact-form-group">
+        <label htmlFor="email" className={validEmail ? "" : "invalid"}>E-mail{validEmail ? "" : " *"} </label>
+        <input
+          type="email"
+          id="ects"
+          minLength="3"
+          maxLength="30"
+          placeholder="E-mail"
+          value={email}
+          onChange={handleEmailChange}
+          required
+          className={validEmail ? "" : "invalid"}
+        />
+      </div>
+      <div className="contact-form-group">
+        <label htmlFor="message" className={validMessage ? "" : "invalid"}>Μήνυμα{validMessage ? "" : " *"} </label>
+        <textarea
+          type="text"
+          id="message"
+          placeholder="Μήνυμα"
+          value={message}
+          onChange={handleMessageChange}
+          required
+          className={validMessage ? "" : "invalid"}
+        />
+      </div>
+      <div className="contact-form-group">
+        <ReCAPTCHA
           className='captcha'
-            sitekey={process.env.REACT_APP_SITE_KEY}
-            onChange={(response) => setRecaptchaResponse(response)}
-          />
-        </div>
-        <div className="modal-buttons">
-          <button className="submit-button" type="submit" onClick={handleFormSubmit}>Υποβολή</button>
-        </div>
+          sitekey={process.env.REACT_APP_SITE_KEY}
+          onChange={(response) => setIsCaptchaVerified(!!response)}
+        />
+      </div>
+      <div className="contact-form-group help-text">
+        {helptext}
+      </div>
+      <div className="modal-buttons">
+        <button
+          className="submit-button"
+          type="submit"
+          onClick={handleFormSubmit}
+          disabled={!validName || !validEmail || !validMessage}>
+          Υποβολή
+        </button>
+      </div>
     </form>
   );
 };

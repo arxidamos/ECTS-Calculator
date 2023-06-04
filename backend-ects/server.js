@@ -4,6 +4,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+require('dotenv').config();
 
 const originalFilename = './Οδηγός για τη λήψη πτυχίου.xlsx';
 
@@ -151,13 +152,31 @@ const handleClientExcelRequest = async (req, res) => {
 
 const handleClientContactSubmission = async (req, res) => {
   try {
-    const {name, email, message } = req.body;
+    const {name, email, message, recaptchaResponse } = req.body;
+
+    console.log(req.body);
+    // Verify reCAPTCHA response
+    try {
+      const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaResponse}`;
+      const verificationResponse = await fetch(verificationUrl);
+      const verificationData = await verificationResponse.json();
+
+      // Verification failed
+      if (!verificationData.success) {
+        return res.status(400).json({ error: 'reCAPTCHA verification failed.' });
+      }
+    }
+    catch (error) {
+      console.error('reCAPTCHA verification error:', error);
+      return res.status(500).json({ error: 'An error occurred during reCAPTCHA verification.' });
+    }
+
     const formData = {
       name,
       email,
       message,
     };
-
+    console.log(formData)
     // Save the form data to a JSON file
     const jsonData = JSON.stringify(formData);
     const filePath = path.join(__dirname, 'form-data.json');
