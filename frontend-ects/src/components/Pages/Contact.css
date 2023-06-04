@@ -85,12 +85,6 @@
   margin-bottom: 1em;
 }
 
-.contact-form-group > input:placeholder-shown {
-  border-bottom-color:pink;
-  background:pink;
-  color:black;
-}
-
 .help-text {
   color: #C70039;
   margin-bottom: 1em;
