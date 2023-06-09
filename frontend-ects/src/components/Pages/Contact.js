@@ -29,36 +29,25 @@ const Contact = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // validateInput('name', name);
-    // validateInput('email', email);
-    // validateInput('message', message);
 
     setValidName((name !== '') && (name.length > 2 && name.length < 31));
     setValidEmail(validateEmail(email));
     setValidMessage(!(message === ''));
-    // if (!validName || !validEmail || !validMessage || !isCaptchaVerified) {
-    //   console.log(`Problem, cause ${name}, ${email}, ${message}, ${isCaptchaVerified}`)
-
-    //   return;
-    // }
     
     // Check if input is valid, using relevant vars and not validVar ones
     if (!validateInput(name, email, message)) {
       setHelptext('Δεν συμπληρώσατε σωστά όλα τα πεδία!');
-      console.log(`Problem, cause ${name}, ${email}, ${message}, ${isCaptchaVerified}`)
       return;
     }
 
     // Check if captcha is completed
     if (!isCaptchaVerified) {
       setHelptext('Δεν ολοκληρώσατε το CAPTCHA!');
-      console.log(`Problem, cause ${name}, ${email}, ${message}, ${isCaptchaVerified}`)
       return;
     }
 
     // Make an API call to the backend
     try {
-      console.log(`sending ${name}, ${email}, ${message}, ${isCaptchaVerified}`)
       const response = await fetch('http://localhost:5000/api/contact', {
         method: 'POST',
         headers: {
@@ -69,7 +58,6 @@ const Contact = () => {
 
       if (response.ok) {
         // Handle successful form submission
-        console.log('Form submitted successfully!');
         alert('Το μήνυμα καταχωρήθηκε επιτυχώς.');
         // Clear form fields
         setName('');
@@ -109,12 +97,6 @@ const Contact = () => {
     setValidMessage((prevMessage) => message !== "");
   };
 
-  // useEffect (() => {
-  //   validateInput('name', name);
-  //   validateInput('email', email);
-  //   validateInput('message', message);
-  // }, [])
-
   return (
     <form className="contact-form">
       <div className="contact-form-group">
@@ -125,7 +107,6 @@ const Contact = () => {
           placeholder="Όνομα"
           value={name}
           onChange={handleNameChange}
-          // onBlur={}
           required
           className={validName ? "" : "invalid"}
         />

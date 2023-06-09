@@ -38,6 +38,11 @@ th.section-label {
   position: relative;
 }
 
+.course-input {
+  font-size: medium;
+  font-weight: bold;
+}
+
 .course-text-container {
   min-width: 12em;
   display: flex;
@@ -192,8 +197,6 @@ th.section-label button:active {
   background-color: #FFC9B1;
 }
 
-
-
 .highlighted-row-elective-spec .course-input, .highlighted-row-elective-spec,
 .highlighted-row-elective-both-specs .course-input, .highlighted-row-elective-both-specs,
 .highlighted-row-elective-extra-spec .course-input, .highlighted-row-elective-extra-spec,
@@ -222,8 +225,6 @@ th.section-label button:active {
   font-size: 9px;
   color: black;
   position: absolute;
-  /* right: 0em; */
   top: 1px;
   left: 1em;
-  /* bottom: 1px; */
 }

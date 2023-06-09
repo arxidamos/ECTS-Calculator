@@ -16,10 +16,11 @@ app.use(cors())
 app.use(express.json());
 
 // Match json courses with excel courses, update excel courses' grades
-const updateExcelGrades = (coursesReceived, worksheet) => {
+const updateExcelGradesAndEcts = (coursesReceived, worksheet) => {
   coursesReceived.forEach( (record) => {
     worksheet.eachRow(function(row, rowNumber) {
       if (row.getCell(3).value === record.course) {
+        // Update course's grade
         if (record.grade && record.grade !== '-') {
           row.getCell(5).value = parseFloat(record.grade);
           row.getCell(5).numFmt = '#0.0';
@@ -30,8 +31,11 @@ const updateExcelGrades = (coursesReceived, worksheet) => {
           row.getCell(5).type = ExcelJS.ValueType.Number;
         }
 
-        if (row.getCell(4).value !== record.ects) {
-          console.log(`${row.getCell(3)} has ${record.ects} ects, but in excel it has ${row.getCell(4)}`)
+        // Update course's ects
+        if (record.ects && record.ects !== row.getCell(4).value) {
+          row.getCell(4).value = parseInt(record.ects);
+          row.getCell(4).numFmt = '#0';
+          row.getCell(4).type = ExcelJS.ValueType.Number;
         }
       }
     });
@@ -117,7 +121,7 @@ const handleClientExcelRequest = async (req, res) => {
     const worksheet = workbook.getWorksheet('Sheet1');
 
     // Modify worksheet with req.body courses JSON data
-    updateExcelGrades(courses, worksheet);
+    updateExcelGradesAndEcts(courses, worksheet);
 
     // Modify worksheet with req.body program info JSON data
     updateExcelProgramInfo(programInfo, worksheet);

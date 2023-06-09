@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import MainPage from './components/Pages/MainPage';
@@ -25,16 +25,6 @@ function App() {
       }
       : JSON.parse(localStorage.getItem('programData'))
   );
-
-
-  // const handleCoursesDataUpdate = (newData) => {
-  //   setCoursesData(newData);
-  // };
-
-  // useEffect(() => {
-  //   setCoursesData(coursesData);
-  //   console.log(coursesData[0]);
-  // }, [coursesData])
 
   return (
     <BrowserRouter>

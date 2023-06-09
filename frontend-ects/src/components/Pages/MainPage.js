@@ -371,7 +371,6 @@ const MainPage = ({ coursesData, setCoursesData, programData, setProgramData }) 
       return groupedCourses;
     }, {});
     setCoursesByType(coursesByType);
-    console.log(coursesData[3]);
   }, [courses]);
 
   const getLabelFromType = (type) => {
@@ -402,7 +401,6 @@ const MainPage = ({ coursesData, setCoursesData, programData, setProgramData }) 
       spec: specialization,
       extraSpec: extraSpecialization
     });
-    console.log(`program data inside mainPage:`, programData);
   }, [track, specialization, extraSpecialization])
 
   // Each time component refreshes, retrieve from localStorage
@@ -678,7 +676,7 @@ const MainPage = ({ coursesData, setCoursesData, programData, setProgramData }) 
 
   return (
     <div className="main-wrapper">
-      <StudentInfo track={track} setTrack={setTrack} specialization={specialization} setSpecialization={setSpecialization} extraSpecialization={extraSpecialization} setExtraSpecialization={setExtraSpecialization} highlight={highlight} setHighlight={setHighlight} findAverage={findAverage} findCoursesPassed={findCoursesPassed}/>
+      <StudentInfo track={track} setTrack={setTrack} specialization={specialization} setSpecialization={setSpecialization} extraSpecialization={extraSpecialization} setExtraSpecialization={setExtraSpecialization} highlight={highlight} setHighlight={setHighlight} findAverage={findAverage} findCoursesPassed={findCoursesPassed} />
       <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <table className="responsive-table">
         {
@@ -806,23 +804,22 @@ const MainPage = ({ coursesData, setCoursesData, programData, setProgramData }) 
               </tbody>
             </React.Fragment>
           ))}
-          <tbody>
-            <tr className="grouplabel">
-              <th colSpan="3" className="section-label section-button">
-                <button onClick={handleAddCourse}>Προσθήκη μαθήματος</button>
-              </th>
-            </tr>
-          </tbody>
+        <tbody>
+          <tr className="grouplabel">
+            <th colSpan="3" className="section-label section-button">
+              <button onClick={handleAddCourse}>Προσθήκη μαθήματος</button>
+            </th>
+          </tr>
+        </tbody>
       </table>
 
-      {/* <button onClick={handleAddCourse}>Προσθήκη μαθήματος</button> */}
       <AddCourseModal
         showModal={showModal}
         closeModal={handleModalClose}
         addNewCourse={addNewCourse}
         setShowModal={setShowModal}
       />
-    <FloatingButton />
+      <FloatingButton />
     </div>
   );
 }

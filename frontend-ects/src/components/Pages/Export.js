@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import * as XLSX from 'xlsx';
 import './Export.css'
 import Spinner from '../Spinner/Spinner'
 
 const sendCoursesReceiveExcel = async (data, filename) => {
   try {
-    console.log(data.programInfo);
     const response = await fetch('http://localhost:5000/api/updateExcel', {
       method: 'POST',
       headers: {
@@ -13,8 +11,7 @@ const sendCoursesReceiveExcel = async (data, filename) => {
       },
       body: JSON.stringify(data)
     });
-    // const responseData = await response.json();
-    // return responseData;
+
     if (!response.ok) {
       throw new Error('Response from server not ok');
     }
