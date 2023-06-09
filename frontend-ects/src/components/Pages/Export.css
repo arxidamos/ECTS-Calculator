@@ -8,6 +8,7 @@
 
 .download-button {
   width: 60%;
+  max-width: 25rem;
   font-size: 18px;
   font-weight: bold;
   padding: 1em 0;
