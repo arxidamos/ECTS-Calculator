@@ -30,25 +30,19 @@ function AddCourseModal({ showModal, setShowModal, closeModal, addNewCourse }) {
     setValidGrade(gradeStyleNumbers.test(value));
   };
 
-  useEffect (() => {
-    validateInput('course', name);
-    validateInput('ects', ects);
-    validateInput('grade', grade);
-  }, [])
-
   const validateInput = (id, value) => {
     switch (id) {
       case 'course':
         setName(value);
-        setValidName(value !== "");
+        setValidName((prevName) => (value !== ''));
         break;
       case 'ects':
         setEcts(value);
-        setValidEcts(value !== "" && Number.isInteger(parseFloat(value)) && parseInt(value) >= 2);
+        setValidEcts((prevEcts) => (value !== "" && Number.isInteger(parseFloat(value)) && parseInt(value) >= 2));
         break;
       case 'grade':
         setGrade(value);
-        setValidGrade(gradeStyleNumbers.test(value));
+        setValidGrade((prevGrade) => gradeStyleNumbers.test(value));
         break;
       default:
         break;
@@ -76,6 +70,9 @@ function AddCourseModal({ showModal, setShowModal, closeModal, addNewCourse }) {
       setName("");
       setEcts("");
       setGrade("");
+      setValidName(true);
+      setValidEcts(true);
+      setValidGrade(true);
     }
   };
 
