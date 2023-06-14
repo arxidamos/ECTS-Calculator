@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './Contact.css'
 
@@ -11,11 +11,10 @@ const validateEmail = (email) => {
 };
 
 const validateInput = (name, email, message) => {
-  console.log (!(name === '') && (name.length > 2 && name.length < 31) && validateEmail(email) && !(message === ''))
   return (!(name === '') && validateEmail(email) && !(message === ''))
 }
 
-const Contact = () => {
+const Contact = ( ) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -32,7 +31,7 @@ const Contact = () => {
 
     setValidName((name !== '') && (name.length > 2 && name.length < 31));
     setValidEmail(validateEmail(email));
-    setValidMessage(!(message === ''));
+    setValidMessage((message !== ''));
     
     // Check if input is valid, using relevant vars and not validVar ones
     if (!validateInput(name, email, message)) {
@@ -81,7 +80,6 @@ const Contact = () => {
   const handleNameChange = (event) => {
     const value = event.target.value;
     setName(value);
-    console.log(name.length, name)
     setValidName((prevName) => (value !== '') && (value.length > 2 && value.length < 31));
   };
   
@@ -94,11 +92,12 @@ const Contact = () => {
   const handleMessageChange = (event) => {
     const value = event.target.value;
     setMessage(value);
-    setValidMessage((prevMessage) => message !== "");
+    setValidMessage((prevMessage) => value !== "");
   };
 
   return (
     <form className="contact-form">
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
       <div className="contact-form-group">
         <label htmlFor="name" className={validName ? "" : "invalid"}>Όνομα{validName ? "" : " *"} </label>
         <input
